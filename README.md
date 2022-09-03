@@ -46,19 +46,19 @@ Your shell should:
   
 • Your shell must implement the following builtins:
 
-  ◦ echo with option -n
+	  ◦ echo with option -n
   
-  ◦ cd with only a relative or absolute path
+	  ◦ cd with only a relative or absolute path
   
-  ◦ pwd with no options
+	  ◦ pwd with no options
   
-  ◦ export with no options
+	  ◦ export with no options
   
-  ◦ unset with no options
+	  ◦ unset with no options
   
-  ◦ env with no options or arguments
+	  ◦ env with no options or arguments
   
-  ◦ exit with no options
+  	  ◦ exit with no options
   
 
 EXTERNAL FUNCTIONS: (description is not garanteed to be accurate and can change anytime... plus i'm silly)
