@@ -20,13 +20,13 @@ Your shell should:
 
 • Implement redirections:
 
-  ◦ < should redirect input.
+	◦ < should redirect input.
   
-  ◦ > should redirect output.
+	◦ > should redirect output.
   
-  ◦ << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
+	◦ << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history!
   
-  ◦ >> should redirect output in append mode.
+	◦ >> should redirect output in append mode.
   
 • Implement pipes (| character). The output of each command in the pipeline is connected to the input of the next command via a pipe.
 
@@ -38,11 +38,11 @@ Your shell should:
 
 • In interactive mode:
 
-  ◦ ctrl-C displays a new prompt on a new line.
+	◦ ctrl-C displays a new prompt on a new line.
   
-  ◦ ctrl-D exits the shell.
+  	◦ ctrl-D exits the shell.
   
-  ◦ ctrl-\ does nothing.
+	◦ ctrl-\ does nothing.
   
 • Your shell must implement the following builtins:
 
@@ -82,148 +82,148 @@ add_history:      euh
 ###stdio###
 
 
-printf:           write in standard input, can add in-code variable with the corresponding flag, RETURNS INT
+	printf:           write in standard input, can add in-code variable with the corresponding flag, RETURNS INT
 
 
 ###stdlib###
 
 
-malloc:           Allocate memory
+	malloc:           Allocate memory
 
-free:             Free memory
+	free:             Free memory
 
 
 ###unistd###
 
 
-write:            write in the corresponding input, 0 is stdin files are between 3 and OPEN_MAX
-access:           euh
+	write:            write in the corresponding input, 0 is stdin files are between 3 and OPEN_MAX
+	access:           euh
 
 
 ###fnctl###
 
 
-open:             can create a link to a file or create a new file,the first parameter gives the path of the file the second gives the indication of the action you want to apply to it and the third apply a chmod in octal (ex: 0666), RETURNS INT
+	open:             can create a link to a file or create a new file,the first parameter gives the path of the file the second gives the indication of the action you want to apply to it and the third apply a chmod in octal (ex: 0666), RETURNS INT
                   
                   
 ###unistd###
 
 
-read:             modify a string to put BUFFER_SIZE char from a file or stdin, RETURNS INT
+	read:             modify a string to put BUFFER_SIZE char from a file or stdin, RETURNS INT
 
 
 ###fnctl###
 
 
-close:            break a link created with open, RETURNS INT
+	close:            break a link created with open, RETURNS INT
 
 
 ###signal###
 
 
-fork:             create a duplicate of the code below, kinda work like a thread
+	fork:             create a duplicate of the code below, kinda work like a thread
 
-wait:             stops the process execution until it gets a signal or a threads end
+	wait:             stops the process execution until it gets a signal or a threads end
 
-waitpid:          same as wait but until the process corressponding to the pid changes
+	waitpid:          same as wait but until the process corressponding to the pid changes
+	
+	wait3:            wait but gives intell about the process
 
-wait3:            wait but gives intell about the process
+	wait4:            waitpid but gives intell about the process
 
-wait4:            waitpid but gives intell about the process
+	signal:           calls the fonction in parameter 2 when gets the corresponding signal of parameter 1
 
-signal:           calls the fonction in parameter 2 when gets the corresponding signal of parameter 1
+	sigaction:        to not mix with sidaction, completely different, it's the same as signal but more complicated and portable, takes a struct in parameter, looks annoying
 
-sigaction:        to not mix with sidaction, completely different, it's the same as signal but more complicated and portable, takes a struct in parameter, looks annoying
+	sigemptyset:      takes the struct sigaction wanna yum and initialize and empty it
 
-sigemptyset:      takes the struct sigaction wanna yum and initialize and empty it
+	sigaddset:        well, you kinda see the point of it if the one above empty it, well it puts a signal in there
 
-sigaddset:        well, you kinda see the point of it if the one above empty it, well it puts a signal in there
-
-kill:             send the given signal to the process corresponding to the pid given
+	kill:             send the given signal to the process corresponding to the pid given
 
 
 ###clib###
 
 
-exit:             stops everything, kinda the hold up meme from Fallout
+	exit:             stops everything, kinda the hold up meme from Fallout
 
 
 ###fnctl###
 
 
-getcwd:           copy the path of the directory you are in a string and, RETURNS IT(CHAR *)
+	getcwd:           copy the path of the directory you are in a string and, RETURNS IT(CHAR *)
 
-chdir:            change directory, takes path, go path, simple
+	chdir:            change directory, takes path, go path, simple
 
-stat:             gives intell about the file, takes path
+	stat:             gives intell about the file, takes path
 
-lstat:            I didn't get it, says it returns intell 'bout symbolic link need research
+	lstat:            I didn't get it, says it returns intell 'bout symbolic link need research
 
-fstat:            intell is fd here
+	fstat:            intell is fd here
 
-unlink:           delete name and possibly the file it refers to from the file system
+	unlink:           delete name and possibly the file it refers to from the file system
 
-execve:           execute a program corresponding to the path given
+	execve:           execute a program corresponding to the path given
 
-dup:              copy fd and allocate a copy in the lowest ununsed one it finds
+	dup:              copy fd and allocate a copy in the lowest ununsed one it finds
 
-dup2:             choose where to allocate the copy
+	dup2:             choose where to allocate the copy
 
-pipe:             wanna chat from one process to another and get ghost ? well pipe is here for ya
+	pipe:             wanna chat from one process to another and get ghost ? well pipe is here for ya
 
 
 ###dirent###
 
 
-opendir:          The opendir() function opens a directory stream corresponding to the directory name, and returns a pointer to the directory stream.  The stream is positioned at the first entry in the directory. TLDR CTRL+C CTRL+V from MAN
+	opendir:          The opendir() function opens a directory stream corresponding to the directory name, and returns a pointer to the directory stream.  The stream is positioned at the first entry in the directory. TLDR CTRL+C CTRL+V from MAN
 
-readdir:          well if you are fluent in fnctl, it's the same but with directories
+	readdir:          well if you are fluent in fnctl, it's the same but with directories
 
-closedir:         close.
+	closedir:         close.
 
 
 ###string###
 
 
-strerror:         gives the error message corresponding to the number
+	strerror:         gives the error message corresponding to the number
 
-perror:           basically, yo whats the pb ? 42 ! Ok I guess i have strerror translate for me
+	perror:           basically, yo whats the pb ? 42 ! Ok I guess i have strerror translate for me
 
 
 ###unistd###
 
 
-isatty:           is a tty says if fd is terminal (tty is not text to yspeech...)
+	isatty:           is a tty says if fd is terminal (tty is not text to yspeech...)
 
-ttyname:          gives the terminal pid 
+	ttyname:          gives the terminal pid 
 
-ttyslot:          find the slot of the current user's terminal in some file (etc/ttys i think)
+	ttyslot:          find the slot of the current user's terminal in some file (etc/ttys i think)
 
-ioctl:            lol, https://linuxhint.com/c-ioctl-function-usage/
+	ioctl:            lol, https://linuxhint.com/c-ioctl-function-usage/
 
 
 ###stdlib###
 
 
-getenv:           get environement variable corresponding to name given, RETURNS CHAR *
+	getenv:           get environement variable corresponding to name given, RETURNS CHAR *
 
 
 ###termios###
 
 
-tcsetattr:        see ya later i'm done with this shit, i don't get it yet     
+	tcsetattr:        see ya later i'm done with this shit, i don't get it yet     
 
-tcgetattr:        
+	tcgetattr:        
 
-tgetent
+	tgetent
 
-tgetflag
+	tgetflag
 
-tgetnum
+	tgetnum
 
-tgetstr
+	tgetstr
 
-tgoto
+	tgoto
 
-tputs
+	tputs
 
