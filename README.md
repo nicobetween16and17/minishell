@@ -65,17 +65,17 @@ EXTERNAL FUNCTIONS: (description is not garanteed to be accurate and can change 
 
 ###readline###
 
-readline:         Display a message in standard input and read one line from it, RETURNS CHAR *
+	readline:         Display a message in standard input and read one line from it, RETURNS CHAR *
 
-rl_clear_history: euh
+	rl_clear_history: euh
 
-rl_on_new_line:   euh
+	rl_on_new_line:   euh
 
-rl_replace_line:  could be nice if worked lol
+	rl_replace_line:  could be nice if worked lol
 
-rl_redisplay:     euh
+	rl_redisplay:     euh
 
-add_history:      euh
+	add_history:      euh
 
 
 
