@@ -19,8 +19,25 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-typedef struct s_history
+typedef struct s_shell
 {
-	t_list	commands;
-}	t_history;
+	t_list	*history;
+	int		fd_cache;
+	char	cache[4096];
+	char	*output;
+	int		fd_redir;
+	char	flag;
+}	t_shell;
+
+void	handle_exit(void);
+void	handle_unset(void);
+void	handle_env(void);
+void	handle_export(void);
+void	handle_pwd(void);
+void	handle_pwd(void);
+void	handle_ls(void);
+void	handle_cat(void);
+void	handle_echo(void);
+
+t_shell shell;
 #endif
