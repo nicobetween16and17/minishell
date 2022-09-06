@@ -19,11 +19,18 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+typedef struct s_command
+{
+	int		type;
+	char	flag;
+	char	*output;
+	char	*subject;
+}	t_command;
+
 typedef struct s_shell
 {
 	t_list	*history;
 	int		fd_cache;
-	char	cache[4096];
 	char	*output;
 	int		fd_redir;
 	char	flag;

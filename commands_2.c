@@ -30,9 +30,9 @@ void	handle_echo(void)
 	shell.history->command += 4;
 	if (*shell.history->command)
 		shell.history->command++;
-	if (!strncmp(shell.history->command, "-n", 2))
+	if (!strncmp(shell.history->command, " -n", 3))
 	{
-		shell.history->command += 2;
+		shell.history->command += 3;
 		shell.flag = 'n'
 	}
 	if (shell.output)
