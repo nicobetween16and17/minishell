@@ -97,7 +97,7 @@ EXTERNAL FUNCTIONS: (description is not garanteed to be accurate and can change 
 
 
 	write:            write in the corresponding input, 0 is stdin files are between 3 and OPEN_MAX
-	access:           euh
+	access:           checks if you have acces to the file 0 if has access -1 else
 
 
 ###fnctl###
