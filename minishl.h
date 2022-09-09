@@ -19,14 +19,6 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
-typedef struct s_command
-{
-	int		type;
-	char	flag;
-	char	*output;
-	char	*subject;
-}	t_command;
-
 typedef struct s_shell
 {
 	t_list	*history;
@@ -34,6 +26,7 @@ typedef struct s_shell
 	char	*output;
 	int		fd_redir;
 	char	flag;
+	char	*current_cmd;
 }	t_shell;
 
 void	handle_exit(void);
@@ -45,6 +38,6 @@ void	handle_pwd(void);
 void	handle_ls(void);
 void	handle_cat(void);
 void	handle_echo(void);
-
+void	handle_parsing(void);
 t_shell shell;
 #endif
