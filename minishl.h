@@ -19,14 +19,21 @@ typedef struct s_list
 	struct s_list	*next;
 }	t_list;
 
+typedef struct s_cmd
+{
+	char	flags[53];
+	char	alias[15];
+	char	*content;
+	int		redirection_fd;
+	int		redirected;
+}	t_cmd;
+
 typedef struct s_shell
 {
 	t_list	*history;
 	int		fd_cache;
 	char	*output;
-	int		fd_redir;
-	char	flag;
-	char	*current_cmd;
+	t_cmd	current_cmd;
 }	t_shell;
 
 void	handle_exit(void);
