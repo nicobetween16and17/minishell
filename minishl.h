@@ -26,13 +26,16 @@ typedef struct s_cmd
 	char	*content;
 	int		redirection_fd;
 	int		redirected;
+	int		nb_flags;
 }	t_cmd;
 
 typedef struct s_shell
 {
 	t_list	*history;
 	int		fd_cache;
+	char	*content;
 	char	*output;
+	int		increment;
 	t_cmd	current_cmd;
 }	t_shell;
 

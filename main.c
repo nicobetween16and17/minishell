@@ -17,47 +17,108 @@ t_list	*new_list(char *line)
 	new->command = line;
 	return (new);
 }
-void	handle_parsing()
+void	handle_alias()
 {
 	char	*command;
 
-	command = shell.current_cmd;
 	if (!strncmp(command, "echo ", 5))
+		shell.current_cmd.alias = "echo";
+	else if (!strncmp(command, "cat ", 4))
+		shell.current_cmd.alias = "cat";
+	else if (!strncmp(command, "ls ", 3))
+		shell.current_cmd.alias = "ls";
+	else if (!strncmp(command, "cd ", 3))
+		shell.current_cmd.alias = "cd";
+	else if (!strncmp(command, "pwd ", 4))
+		shell.current_cmd.alias = "pwd";
+	else if (!strncmp(command, "export ", 7))
+		shell.current_cmd.alias = "export";
+	else if (!strncmp(command, "env ", 4))
+		shell.current_cmd.alias = "env";
+	else if (!strncmp(command, "unset ", 6))
+		shell.current_cmd.alias = "unset";
+	else if (!strncmp(command, "exit ", 5))
+		shell.current_cmd.alias = "exit";;
+}
+
+int	contain(char c, char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s && s[++i])
+	{
+		if (s[i] == c)
+			return (1);
+	}
+	return (0);
+}
+int	is_alpha(char c)
+{
+	return ((c <= 90 && c >= 65) || (c <= 126 && c >= 97));
+}
+
+void	handle_flags()
+{
+	shell.current_cmd.nb_flags = 0;
+	shell.history->command += (strlen(shell.current_cmd.alias) + 1);
+	shell.increment += (strlen(shell.current_cmd.alias) + 1);
+	while (*shell.history->command == ' ' && shell.increment++)
+		shell.history->command++;
+	if (shell.history->command && *shell.history->command == '-' && shell.increment++)
+		shell.history->command++;
+	while (shell.history->command && *shell.history->command != ' ' && shell.increment++)
+	{
+		if (!contain(*shell.history->command, flags) && is_alpha(*shell.history->command))
+			shell.current_cmd.flags[shell.current_cmd.nb_flags++] = *shell.history->command;
+	}
+	shell.current_cmd.flags[shell.current_cmd.nb_flags + 1] = 0;
+}
+
+void	handle_output()
+{
+	if (!strncmp(command, "echo", 5))
 		handle_echo();
-	if (!strncmp(command, "cat ", 4))
+	else if (!strncmp(command, "cat", 3))
 		handle_cat();
-	if (!strncmp(command, "ls ", 3))
+	else if (!strncmp(command, "ls", 2))
 		handle_ls();
-	if (!strncmp(command, "cd ", 3))
+	else if (!strncmp(command, "cd", 2))
+		handle_cd();
+	else if (!strncmp(command, "pwd", 3))
 		handle_pwd();
-	if (!strncmp(command, "pwd ", 4))
-		handle_pwd();
-	if (!strncmp(command, "export ", 7))
+	else if (!strncmp(command, "export", 6))
 		handle_export();
-	if (!strncmp(command, "env ", 4))
+	else if (!strncmp(command, "env", 3))
 		handle_env();
-	if (!strncmp(command, "unset ", 6))
+	else if (!strncmp(command, "unset", 5))
 		handle_unset();
-	if (!strncmp(command, "exit ", 5))
+	else if (!strncmp(command, "exit", 4))
 		handle_exit();
-	else
-		printf("zsh: command not found: %s\n", shell.current_cmd);
+}
+
+void	handle_cmd()
+{
+	handle_alias();
+	if (shell.current_cmd.alias[0] != 0)
+	{
+		handle_flags();
+		shell.content = shell.history->command;
+		handle_output();
+		handle_redirection();
+		if (contain('|', shell.history->command))
+			handle_cmd();
+	}
+
 }
 void	handle_history()
 {
 	signal(SIGINT, handle);
 	signal(SIGSEGV, handle);
 	add_front(&shell.history, new_list(readline("\033[0;32mminishell>\033[0m")));
-	//if (shell.current_cmd)
-	//	free(shell.current_cmd);
-	//printf("here\n");
 	shell.current_cmd = strdup(shell.history->command);
-	/*if (read(shell.fd_cache, shell.cache, 1) > 0)
-		write(shell.fd_cache, "\f", 5);
-	write(shell.fd_cache, shell.history->command, strlen(shell.history->command));
-	write(shell.fd_cache, "\n", 1);
-	//if (contain_pipe(shell.history->command))*/
-	handle_parsing();
+	handle_cmd();
+
 }
 void	handle(int sig)
 {
