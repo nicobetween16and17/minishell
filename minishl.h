@@ -13,38 +13,23 @@
 # include <errno.h>
 # include <signal.h>
 
-typedef struct s_list
+typedef struct s_requests
 {
-	char			*command;
-	struct s_list	*next;
-}	t_list;
-
-typedef struct s_cmd
-{
-	char	flags[53];
-	char	alias[15];
-	char	*content;
-	int		redirection_fd;
-	int		redirected;
-}	t_cmd;
+	char				flags[56];
+	char				alias[15];
+	char				*content;
+	int					out;
+	int					in;
+	struct s_requests	*next;
+}	t_request;
 
 typedef struct s_shell
 {
-	t_list	*history;
-	int		fd_cache;
-	char	*output;
-	t_cmd	current_cmd;
+	t_list		*history;
+	int			fd_cache;
+	char		*output;
+	t_request	*request;
 }	t_shell;
 
-void	handle_exit(void);
-void	handle_unset(void);
-void	handle_env(void);
-void	handle_export(void);
-void	handle_pwd(void);
-void	handle_pwd(void);
-void	handle_ls(void);
-void	handle_cat(void);
-void	handle_echo(void);
-void	handle_parsing(void);
 t_shell shell;
 #endif
