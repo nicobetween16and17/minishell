@@ -12,13 +12,26 @@
 # include <limits.h>
 # include <errno.h>
 # include <signal.h>
+# include "libft/libft.h"
 
-typedef struct s_list
+typedef struct s_request
 {
-	char			*command;
+	char			*cmd;
+	char			*flags;
+	char			**elements;
 	struct s_list	*next;
-}	t_list;
+}	t_request;
 
+typedef struct s_parsing
+{
+	int			i;
+	int			quotes;
+	t_request	*requests;
+	t_request	*head;
+	char		*s;
+	int			step;
+	int			last_i;
+}	t_parsing;
 typedef struct s_cmd
 {
 	char	flags[53];
@@ -31,23 +44,9 @@ typedef struct s_cmd
 
 typedef struct s_shell
 {
-	t_list	*history;
-	int		fd_cache;
-	char	*content;
-	char	*output;
-	int		increment;
-	t_cmd	current_cmd;
+	char		*line;
+	t_request	*request;
 }	t_shell;
 
-void	handle_exit(void);
-void	handle_unset(void);
-void	handle_env(void);
-void	handle_export(void);
-void	handle_pwd(void);
-void	handle_pwd(void);
-void	handle_ls(void);
-void	handle_cat(void);
-void	handle_echo(void);
-void	handle_parsing(void);
 t_shell shell;
 #endif

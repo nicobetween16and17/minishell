@@ -75,42 +75,6 @@ void	handle_flags()
 	shell.current_cmd.flags[shell.current_cmd.nb_flags + 1] = 0;
 }
 
-void	handle_output()
-{
-	if (!strncmp(command, "echo", 5))
-		handle_echo();
-	else if (!strncmp(command, "cat", 3))
-		handle_cat();
-	else if (!strncmp(command, "ls", 2))
-		handle_ls();
-	else if (!strncmp(command, "cd", 2))
-		handle_cd();
-	else if (!strncmp(command, "pwd", 3))
-		handle_pwd();
-	else if (!strncmp(command, "export", 6))
-		handle_export();
-	else if (!strncmp(command, "env", 3))
-		handle_env();
-	else if (!strncmp(command, "unset", 5))
-		handle_unset();
-	else if (!strncmp(command, "exit", 4))
-		handle_exit();
-}
-
-void	handle_cmd()
-{
-	handle_alias();
-	if (shell.current_cmd.alias[0] != 0)
-	{
-		handle_flags();
-		shell.content = shell.history->command;
-		handle_output();
-		handle_redirection();
-		if (contain('|', shell.history->command))
-			handle_cmd();
-	}
-
-}
 void	handle_history()
 {
 	signal(SIGINT, handle);
