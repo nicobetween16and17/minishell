@@ -16,10 +16,10 @@
 
 typedef struct s_request
 {
-	char			*cmd;
-	char			*flags;
-	char			**elements;
-	struct s_list	*next;
+	char				*cmd;
+	char				*flags;
+	char				**elements;
+	struct s_request	*next;
 }	t_request;
 
 typedef struct s_parsing
@@ -31,7 +31,9 @@ typedef struct s_parsing
 	char		*s;
 	int			step;
 	int			last_i;
+	int			flag;
 }	t_parsing;
+
 typedef struct s_cmd
 {
 	char	flags[53];
@@ -45,8 +47,10 @@ typedef struct s_cmd
 typedef struct s_shell
 {
 	char		*line;
+	char		**env;
 	t_request	*request;
 }	t_shell;
 
 t_shell shell;
+void parsing();
 #endif
