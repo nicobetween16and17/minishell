@@ -53,7 +53,6 @@ typedef struct s_shell
 {
 	char		*line;
 	char		**env;
-	t_env		*lst_env;
 	t_token		*tokens;
 
 }	t_shell;
