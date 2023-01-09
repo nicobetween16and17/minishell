@@ -129,58 +129,11 @@ void	handle(int sig)
 	write(0, "\n", 1);
 	handle_history();
 }
-t_env	*last_env(t_env *start)
-{
-	if (!start)
-		return (start);
-	while (start->next)
-		start = start->next;
-	return (start);
-}
-void	add_back_env(t_env **start, t_env *new)
-{
-	t_env	*tmp;
 
-	tmp = last_env(*start);
-	tmp->next = new;
-}
-
-void set_lst_env(t_env *lst_env, char **env, int i)
-{
-	t_env	current;
-	char	**split;
-
-	while (env && env[++i])
-	{
-		split = ft_split(env[i], '=');
-		printf("[%s]\n[%s]\n", split[0], split[1]);
-		current.next = NULL;
-		current.name = split[0];
-		current.value = split[1];
-		if (!lst_env)
-			lst_env = &current;
-		else
-			add_back_env(&lst_env, &current);
-		free(split);
-	}
-}
 int	main(int ac, char **av, char **env)
 {
-	t_env list;
 
 	shell.env = env;
-	set_lst_env(&list, env, -1);
-	shell.lst_env = &list;
-	exit(0);
-	int i = -1;
-	while (env && env[++i])
-		printf("%s\n", env[i]);
-	while (shell.lst_env)
-	{
-		printf("name: %s\nvalue: %s\n", shell.lst_env->name, shell.lst_env->value);
-		shell.lst_env = shell.lst_env->next;
-	}
-	exit(0);
 	while (1)
 	{
 		handle_history();

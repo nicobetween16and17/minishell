@@ -41,13 +41,6 @@ typedef struct s_parsing
 	char	quotes_type;
 }	t_parsing;
 
-typedef struct s_env{
-
-	char			*name;
-	char			*value;
-	struct s_env	*next;
-}t_env;
-
 typedef struct s_request
 {
 	char				*cmd;
