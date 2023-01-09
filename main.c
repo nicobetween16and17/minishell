@@ -101,15 +101,15 @@ void	replace_words(t_shell *shell)
 }
 void	handle_history()
 {
-	t_token *tmp;
+	//t_token *tmp;
 
 	signal(SIGSEGV, handle);
 	shell.line = readline("minishell> ");
 	add_history(shell.line);
 	shell.tokens = parse(shell.line);
-	tmp = shell.tokens;
-	replace_words(&shell);
-	shell.tokens = tmp;
+	//tmp = shell.tokens;
+	//replace_words(&shell);
+	//shell.tokens = tmp;
 	while (shell.tokens)
 	{
 		printf("--------\n");
@@ -132,7 +132,6 @@ void	handle(int sig)
 
 int	main(int ac, char **av, char **env)
 {
-
 	shell.env = env;
 	while (1)
 	{
