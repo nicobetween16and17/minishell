@@ -31,24 +31,27 @@ char *get_replacement(char *s1)
 	return (getenv(s2));
 }
 
-void	replace(char *str, char *search, char *replace)
+char	*replace(char *str, char *search, char *replace)
 {
-	char	*ptr;
-	int		search_len;
-	int		replace_len;
+	char	*res;
+	char	*start;
+	int		i;
 
-	ptr = str;
-	search_len = ft_strlen(search);
-	replace_len = ft_strlen(replace);
-	ptr = ft_strnstr(ptr, search, ft_strlen(ptr));
-	while (ptr != NULL)
+	i = 0;
+	start = ft_strnstr(str, search, ft_strlen(str));
+	res = malloc(sizeof(char) * (ft_strlen(str) - ft_strlen(search) + ft_strlen(replace) + 1));
+	while (str && *str)
 	{
-		ft_memmove(ptr + replace_len, ptr + search_len,
-				   ft_strlen(ptr + search_len) + 1);
-		ft_memcpy(ptr, replace, replace_len);
-		ptr += replace_len;
-		ptr = ft_strnstr(ptr, search, ft_strlen(ptr));
+		res[i++] = *str;
+		if (str == start)
+		{
+			while (replace && *replace)
+				res[i++] = *(replace++);
+			str += ft_strlen(search) - 1;
+		}
+		str++;
 	}
+	return (str);
 }
 
 char *search(char *s)
@@ -71,51 +74,51 @@ char *search(char *s)
 	return (res);
 }
 
-void	replace_words(t_shell *shell)
+void	replace_words(t_shell *shell, t_token *tokens)
 {
 	char	*tmp;
 	char	*tmp2;
-
-	while (shell->tokens)
+	char	*tmp3;
+	while (tokens)
 	{
-		if (shell->tokens->genre != ELEM_S_QUOTES)
+		if (tokens->genre != ELEM_S_QUOTES)
 		{
-			if (shell->tokens->genre != ELEM_D_QUOTES)
+			if (tokens->genre != ELEM_D_QUOTES)
 			{
-				tmp = get_replacement(shell->tokens->s + 1);
-				free(shell->tokens->s);
+				tmp = get_replacement(tokens->s + 1);
+				free(tokens->s);
 				shell->tokens->s = tmp;
 			}
-			else if (contain('$', shell->tokens->s))
+			else if (contain('$', tokens->s))
 			{
-				tmp = search(shell->tokens->s);
+				tmp = search(tokens->s);
 				tmp2 = get_replacement(tmp + 1);
-				printf("string tot [%s]\nsearch [%s]\nreplacement [%s]\n", shell->tokens->s, tmp, tmp2);
-				replace(shell->tokens->s, tmp, tmp2);
-				printf("string tot [%s]\nsearch [%s]\nreplacement [%s]\n", shell->tokens->s, tmp, tmp2);
+				printf("string tot [%s]\nsearch [%s]\nreplacement [%s]\n", tokens->s, tmp, tmp2);
+				tmp3=replace(tokens->s, tmp, tmp2);
+				free(tokens->s);
+				tokens->s = tmp3;
+				printf("string tot [%s]\nsearch [%s]\nreplacement [%s]\n", tokens->s, tmp, tmp2);
 				continue ;
 			}
 		}
-		shell->tokens = shell->tokens->next;
+		tokens = tokens->next;
 	}
 }
 void	handle_history()
 {
-	t_token *tmp;
-
 	signal(SIGSEGV, handle);
 	shell.line = readline("minishell> ");
 	add_history(shell.line);
 	shell.tokens = parse(shell.line);
-	tmp = shell.tokens;
-	replace_words(&shell);
-	shell.tokens = tmp;
+	replace_words(&shell, shell.tokens);
 	while (shell.tokens)
 	{
 		printf("--------\n");
 		printf("%s %s\n", ft_strtrim(shell.tokens->s, " "), get_token(shell.tokens->genre));
+		free(shell.tokens.s);
 		shell.tokens = shell.tokens->next;
 	}
+
 }
 void	handle(int sig)
 {
@@ -132,7 +135,6 @@ void	handle(int sig)
 
 int	main(int ac, char **av, char **env)
 {
-
 	shell.env = env;
 	while (1)
 	{
