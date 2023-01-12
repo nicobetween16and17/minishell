@@ -34,7 +34,7 @@ int	cut(t_parsing *p, char *s, t_type type)
 	if (c == '<' || c == '>')
 		while (s[p->i] && (s[p->i] == '>' || s[p->i] == '<'))
 			p->i++;
-	add_back(&p->t, new_token((substr(s, p->last_i, p->i)), type));
+	add_back(&p->t, new_token((ft_substr(s, p->last_i, p->i)), type));
 	p->last_i = p->i;
 	if (s[p->i] == ' ')
 		p->i--;

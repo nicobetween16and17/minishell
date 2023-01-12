@@ -14,6 +14,7 @@
 # include <signal.h>
 # include "libft/libft.h"
 
+
 typedef enum e_type
 {
 	REDIR,
@@ -57,7 +58,7 @@ typedef struct s_shell
 
 }	t_shell;
 
-t_shell shell;
+int g_err;
 t_token	*parse(char *s);
 void	parsing();
 char	*get_token(int n);
