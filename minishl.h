@@ -1,5 +1,6 @@
 #ifndef MINISHL_H
 # define MINISHL_H
+# define HEREDOC .tmp.heredocfile
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -46,6 +47,9 @@ typedef struct s_request
 	char				*cmd;
 	char				*flags;
 	char				**elements;
+	int					infile;
+	int					outfile;
+	char				*here_doc;
 	struct s_request	*next;
 }	t_request;
 
@@ -56,6 +60,12 @@ typedef struct s_shell
 	t_token		*tokens;
 
 }	t_shell;
+
+typedef struct	s_list_of_command
+{
+	t_request *cmd;
+	t_list_of_command *next;
+}	t_list_of_command;
 
 t_shell shell;
 t_token	*parse(char *s);
