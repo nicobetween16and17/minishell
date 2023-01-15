@@ -23,7 +23,7 @@ int check_left(char *s)
 	if (*s == '>')
 	{
 		skip_space(&s);
-		if (ft_strchr("<>|", s))
+		if (ft_strchr("<>|">>, s))
 			return (erreur_de_syntaxe());
 		return (0);
 	}
@@ -81,7 +81,7 @@ int	check_syntax(char *s)
 	while (*s)
 	{
 		switch_quote(s, quote);
-		if (!quote && *s == '&()')
+		if (!quote && ft_strchr("&()", *s))
 			error_message("probleme de syntaxe");
 		check_syntaxe_redirection(&s);
 		if (*s == '|' && check_pipe_after_pipe())

@@ -1,6 +1,6 @@
 #ifndef MINISHL_H
 # define MINISHL_H
-# define HEREDOC .tmp.heredocfile
+# define HEREDOC .heredoc.temp
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -25,6 +25,13 @@ typedef enum e_type
 	FLAGS,
 	FILENAME
 }	t_type;
+
+enum
+{
+	EXIST,
+	READ,
+	WRITE
+};
 
 typedef struct s_token
 {
@@ -51,6 +58,7 @@ typedef struct s_request
 	int					outfile;
 	char				*here_doc;
 	struct s_request	*next;
+	char				quote;
 }	t_request;
 
 typedef struct s_shell
@@ -64,7 +72,7 @@ typedef struct s_shell
 typedef struct	s_list_of_command
 {
 	t_request *cmd;
-	t_list_of_command *next;
+	struct s_list_of_command *next;
 }	t_list_of_command;
 
 t_shell shell;
