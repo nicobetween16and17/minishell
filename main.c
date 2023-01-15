@@ -26,40 +26,30 @@ int	contain(char c, char *s)
 
 int	find(char *env_line, char *to_find)
 {
-	while (*env_line && ft_strncmp(env_line, to_find, ft_strlen(to_find)))
-		env_line++;
-	return (*env_line);
+	int	i;
+
+	i = 0;
+	while (env_line[i] && ft_strncmp(env_line + i, to_find, ft_strlen(to_find)))
+		i++;
+	return (env_line[i]);
 }
 
 char	*get_env(char *s, char **env)
 {
 	int	i;
+	int	j;
 
+	j = 0;
 	i = 0;
 	while (env[i] && !find(env[i], s))
 		i++;
 	if (!env[i])
 		return ("");
-	while (*(env[i]) != '=')
-		env[i]++;
-	env[i]++;
-	return (env[i]);
-}
-
-char	*get_replacement(char *s1, t_shell *shell)
-{
-	int i;
-	int j;
-	char *s2;
-
-	i = 0;
-	j = -1;
-	while (s1 && s1[i] != ' ' && s1[i] != 0)
-		i++;
-	s2 = malloc(sizeof(char) * (i + 1));
-	while (i > ++j)
-		s2[j] = s1[j];
-	return (get_env(s2, shell->env));
+	while (env[i][j] != '=')
+		++j;
+	j++;
+	//printf("REPLACEMENT IS %s\n", env[i]);
+	return (env[i] + j);
 }
 
 char	*empty_freeable_string()
@@ -77,7 +67,6 @@ char	*replace(char *str, char *search, char *replace)
 	char	*start;
 	int		i;
 
-	printf("REPLACE %s\n", replace);
 	i = 0;
 	if (strlen(search) <= 1)
 		return (empty_freeable_string());
@@ -87,46 +76,23 @@ char	*replace(char *str, char *search, char *replace)
 		- ft_strlen(search) + ft_strlen(replace) + 1));
 	while (str && *str)
 	{
-		printf("%s == %s\n", str, start);
-		if (str == start && printf("found equality\n"))
+		if (str == start)
 		{
+			i--;
 			while (replace && *replace)
 				res[i++] = *(replace++);
-			printf("%s\n%s\n", str, res);
 			str += ft_strlen(search);
 		}
 		if (*str)
 			res[i++] = *str;
-		printf("RES %s\n", res);
 		str++;
 	}
 	res[i] = 0;
+	//printf("REPLACE LINE IS %s\n", res);
 	return (res);
 }
 
-char *search(char *s, int i)
-{
-	char	*res;
-	int		j;
-
-	i = 0;
-	j = 1;
-	while (s && s[i] && s[i] != '$' && s[i + 1])
-		i++;
-	if (s[i] && s[i + 1] && s[i + 1] == ' ')
-		return (search(s, i));
-	while (s && s[i] && s[i + j] && s[i + j] != ' ' && s[i + j] != '$')
-		j++;
-	res = malloc(sizeof(char) * (j + 1));
-	j = 0;
-	while (s && s[i] && s[i] != ' ')
-		res[j++] = s[i++];
-	res[j] = 0;
-	printf("SEARCH %s\n", res);
-	return (res);
-}
-
-int is_expandable(char *s, int i)
+int	is_expandable(char *s, int i, int open)
 {
 	int	sgl;
 	int	dbl;
@@ -137,45 +103,62 @@ int is_expandable(char *s, int i)
 	j = -1;
 	while (s && s[++j] && j < i)
 	{
-		((!sgl && !dbl && s[j] == '\"' && ++dbl) || (!dbl  && !sgl
-		&& s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j]== '\"' && ++dbl)
-		|| (!dbl  && sgl && s[j] == '\'' && ++sgl));
+		((!sgl && !dbl && s[j] == '\"' && ++dbl) || (!dbl && !sgl
+			&& s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"'
+			&& dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));
 	}
+	if (open)
+		return (sgl || dbl);
+	return (!sgl);
 }
-void	replace_words(t_shell *shell, t_token *tokens)
+void	display(char **env, int i)
 {
-	char	*tmp;
-	char	*tmp2;
-	char	*tmp3;
+	while (env[++i])
+		printf("%d: %s\n", i, env[i]);
+}
+void	replace_words(t_shell *shell, int i, int j)
+{
+	char *tmp;
+	char *tmp2;
 
-	if (tokens->genre != ELEM_S_QUOTES && contain('$', tokens->s))
+	while (shell->line && shell->line[++i])
 	{
-		else
+		if (shell->line[i] == '$' && is_expandable(shell->line, i, 0)
+			&& shell->line[i + 1] != '$' && shell->line[i + 1] != '/'
+			&& shell->line[i + 1] != ' ' && shell->line[i + 1] != '.'
+			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"')
 		{
-			tmp = search(tokens->s, 0);
-			if (ft_strncmp(tmp, "$?", 2))
-				tmp2 = ft_itoa(g_err);
-			tmp2 = get_replacement(tmp, shell);
-			tmp3 = replace(tokens->s, tmp, tmp2);
-			free(tokens->s);
+			tmp2 = shell->line;
+			j = i + 1;
+			while (shell->line && shell->line[j] != '$'
+				&& shell->line[j] != '/' && shell->line[j] != ' '
+				&& shell->line[j] != '.' && shell->line[j] != '\''
+				&& shell->line[j] != '\"')
+				j++;
+			tmp = ft_substr(shell->line, i, j - i);
+			//printf("SUBSTRING IS %s\n", tmp);
+			display(shell->env, -1);
+			shell->line = replace(shell->line, tmp, get_env(tmp + 1, shell->env));
+			//printf("FINAL RESULT %s\n", shell->line);
+			free(tmp2);
 			free(tmp);
-			if (ft_strncmp(tmp, "$?", 2))
-				free(tmp2);
-			tokens->s = tmp3;
-			printf("token %s\n", tmp3);
-			continue ;
+			printf("-------------------\n");
 		}
 	}
-
 }
+
+
 void	handle_history(t_shell *shell)
 {
 	//signal(SIGINT, handle);
 	signal(SIGSEGV, handle);
 	shell->line = readline("minishell> ");
 	add_history(shell->line);
+	printf("PRE REPLACEMENT %s\n", shell->line);
+	replace_words(shell, -1, 0);
+	printf("POST REPLACEMENT %s\n", shell->line);
+	exit(0);
 	shell->tokens = parse(shell->line);
-	replace_words(shell, shell->tokens);
 	while (shell->tokens)
 	{
 		printf("--------\n");

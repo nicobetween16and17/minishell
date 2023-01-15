@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/13 15:05:02 by niespana          #+#    #+#             */
+/*   Updated: 2023/01/13 15:05:04 by niespana         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
@@ -10,40 +22,10 @@ typedef struct path
 	int	exit;
 }	t_path;
 
-void	ft_path(t_path *path, char **map, int y, int x)
-{
-	if (((map[y + 1][x] == 'C' && path->coins++) || (map[y + 1][x] == 'E'
-		&& path->exit++) || 1) && map[y + 1][x] != '1')
-	{
-		map[y + 1][x] = '1';
-		ft_path(path, map, y + 1, x);
-	}
-	if (((map[y - 1][x] == 'C' && path->coins++) || (map[y - 1][x] == 'E'
-		&& path->exit++) || 1) && map[y - 1][x] != '1')
-	{
-		map[y - 1][x] = '1';
-		ft_path(path, map, y - 1, x);
-	}
-	if (((map[y][x + 1] == 'C' && path->coins++) || (map[y][x + 1] == 'E'
-		&& path->exit++) || 1) && map[y][x + 1] != '1')
-	{
-		map[y][x + 1] = '1';
-		ft_path(path, map, y, x + 1);
-	}
-	if (((map[y][x + 1] == 'C' && path->coins++) || (map[y][x + 1] == 'E'
-		&& path->exit++) || 1) && map[y][x + 1] != '1')
-	{
-		map[y][x + 1] = '1';
-		ft_path(path, map, y, x + 1);
-	}
-}
 
 int	main(int ac, char **av, char **env)
 {
-	t_path	path;
-
-	path.coins = 0;
-	path.exit = 1;
-	ft_path(&path, av, 1, 1);
-	return (0);
+	char *test = "\"la s'tri'ng\"'l'autre string'";
+	printf("%d\n", is_expandable(test, strlen(test), 1));
+	printf("%d\n", is_expandable(test, 4, 0));
 }

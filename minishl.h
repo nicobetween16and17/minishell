@@ -48,6 +48,8 @@ typedef struct s_request
 	char				*flags;
 	char				**elements;
 	struct s_request	*next;
+	int fd_out;
+	int fd_in;
 }	t_request;
 
 typedef struct s_shell
