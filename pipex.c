@@ -1,11 +1,11 @@
-#include "../minishl.h"
+#include "minishl.h"
 
-pipex_loop(t_request *request,saved_fd, envp)
+pipex_loop(t_request *request,int saved_fd[2], char **envp)
 {
-    while (lst_cmd->cmd)
+    while (request->cmd)
     {
         pipex(request, saved_fd, envp);
-        request-> = request->next;
+        request = request->next;
     }
 }
 

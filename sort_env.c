@@ -3,12 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbierny <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: gbierny <gbierny@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 22:19:05 by gbierny           #+#    #+#             */
-/*   Updated: 2023/01/10 22:19:07 by gbierny          ###   ########.fr       */
+/*   Updated: 2023/01/13 20:23:18 by gbierny          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+#include "minishl.h"
+
+
+char *print_name_variable(char *s)
+{
+    size_t i;
+
+    i = 0;
+    while (s[i] && s[i] != '=')
+        i++;
+    write(1, s, i);
+    return (s + i + 1);
+}
 
 void env_in_alphabetic_order(char **envp)
 {
@@ -16,9 +31,8 @@ void env_in_alphabetic_order(char **envp)
     int j;
 
     i = 0;
-    char *front_arg;
-    char *current_arg;
-    while(envp[i])
+    char *s;
+    while (envp[i])
     {
         j = i;
         while (envp[j + 1])
@@ -27,6 +41,16 @@ void env_in_alphabetic_order(char **envp)
             envp = switch_env_var(envp, i, j);
             j++;
         }
+        i++;
+    }
+    i = 0;
+    while (envp[i])
+    {
+        ft_putstr_fd("declare -x ", 1);
+        s = print_name_variable(envp[i]);
+        ft_putstr_fd("=\"", 1);
+        ft_putstr_fd(s, 1);
+        ft_putstr_fd("\"\n", 1);
         i++;
     }
 }
