@@ -102,11 +102,38 @@ void    fonction(int *i)
     printf("le i dans fonction %d", *i);
 }
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	while ((s1[i] || s2[i]) && i < n)
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
+}
+
+void	handler(int n)
+{
+	char c = (char)n + 48;
+	write(1,&c, 1);
+}
+
 int main(int argc, char **argv, char **envp)
 {
-    int i = 0;
-
-    fonction(&i);
+	struct sigaction sa;
+	int x = 98;
+	char i = (char)x;
+	sa.sa_flags = SA_RESTART;
+	sa.sa_handler = &handler;
+    sigaction(SIGKILL, &sa, NULL);
+	while (1)
+		;
 }
 
 

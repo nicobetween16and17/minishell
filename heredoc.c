@@ -1,11 +1,9 @@
 #include "minishl.h"
 
-int here_doc(char *delimiter)
+
+int	check_here_doc_access(fd)
 {
-	char *buffer;
-	int here_doc_file;
-	here_doc_file = open (".here_doc.temp", O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (here_doc_file < 0)
+	if (fd < 0)
 	{
 		if (check_access_of_file(cmd, &word, s, i))
             return (1);
@@ -14,17 +12,31 @@ int here_doc(char *delimiter)
         if (check_access_of_file(cmd, &word, s, i))
             return (1);
 	}
+}
+
+int here_doc(char *delimiter)
+{
+	char *buffer;
+	int here_doc_file;
+	int j;
+
+	j = 0;
+	here_doc_file = open (HEREDOC, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (check_here_doc_access(here_doc_file))
+		return (1);
 	while(1)
 	{
-		write(0, "> ", 2);
-		buffer = get_next_line(0);
-		if (buffer && !ft_strncmp(buffer, delimiter, ft_strlen(delimiter)))
-		{
-			write(here_doc_file, buffer, ft_strlen(buffer))
-			free(buffer);
-		}
+		buffer = readline("> ");
+		if (!ft_strncmp(buffer, delimiter, ft_strlen(buffer)) && ft_strlen(buffer) == ft_strlen(delimiter))
+			break ;
 		else
-			break;
+		{
+			if (j)
+				write(here_doc_file, "\n", 1);
+			else
+				j++;
+			write(here_doc_file, buffer, ft_strlen(buffer));
+		}
 	}
 	return (here_doc_file);
 }

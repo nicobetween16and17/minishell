@@ -56,12 +56,22 @@ void    pipex(t_request *request, int saved_fd[2], char **envp)
 }
 
 
+
+void    execution()
+{
+    builtin_cmd();
+    
+    if (is_path_existing(cmd[0]))
+    {
+
+    }
+}
+
 void    make_the_redirection(int saved_fd[2])
 {
     if (request->here_doc)
     {
         back_to_saved_fd(saved_fd);
-        
         unlink(HEREDOC);
     }
     if (request->infile)
@@ -75,7 +85,7 @@ void    just_before_execution(char **envp, t_request *request, int fd_save[2])
 {
     make_the_redirection();
     get_path_of_command();
-    exec_fnc();
+    execution();
     exec_error_case();
 }
 

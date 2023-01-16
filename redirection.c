@@ -180,5 +180,5 @@ int	here_doc_case(t_request *cmd, int *i, char *s)
 		cmd->infile = 0;
 	get_name_of_file(cmd, &word, s, i);
 	cmd->here_doc = word;
-	
+	cmd->infile = here_doc(word);
 }
