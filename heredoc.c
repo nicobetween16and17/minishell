@@ -38,5 +38,6 @@ int here_doc(char *delimiter)
 			write(here_doc_file, buffer, ft_strlen(buffer));
 		}
 	}
+	close(here_doc_file);
 	return (here_doc_file);
 }
