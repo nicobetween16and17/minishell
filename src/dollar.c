@@ -178,17 +178,17 @@ char	*ft_itoa(int n)
 	return (itoa);
 }
 
-char *ft_concat(char *s1, char *s2, size_t i)
+char *ft_concat(char *s1, char *s2)
 {
     char *new;
-    size_t len = i + ft_strlen(s2);
+    size_t len = ft_strlen(s1) + ft_strlen(s2);
     new = malloc((len + 1) * sizeof(char));
     if (!new)
     {
         exit(0);
     }
-    ft_strlcpy(new, s1, i);
-    ft_strlcat(new, s2, len);
+    ft_strlcpy(new, s1, ft_strlen(s1) + 1);
+    ft_strlcat(new, s2, len + 1);
     return (new);
 }
 
@@ -212,30 +212,24 @@ char *add_char_to_string(char *word, char c)
 	return (new_word);
 }
 
-
-void	put_in_the_middle(char **s, int *i, size_t n_char, char *for_middle)
-{
-	char *new_s;
-	char *tmp;
-
-	tmp = ft_strdup((*s) + (*i) + n_char);
-	new_s = ft_strndup((*s), (size_t)((*i) + 1));
-    new_s = ft_concat(new_s, for_middle, ft_strlen(new_s) + ft_strlen(for_middle));
-    new_s = ft_concat(new_s, tmp, ft_strlen(new_s));
-	(*i) += (ft_strlen(for_middle) - 2);
-	(*s) = new_s;
-	free(tmp);
-}
-
 int	double_dollar(char **s, int *i)
 {
     pid_t pid;
+    char *new_s;
+	char *tmp;
     char    *pid_string;
     if ((*s)[(*i) + 1] != '$')
         return (1);
     pid = getpid();
     pid_string = ft_itoa(((int)pid)); 
-    put_in_the_middle(s, i, 2, pid_string);
+	tmp = ft_strdup((*s) + (*i) + 2);
+	printf("mon tmp: %s\n", tmp);
+	new_s = ft_strndup((*s), (size_t)((*i) + 1));
+    new_s = ft_concat(new_s, pid_string);
+    new_s = ft_concat(new_s, tmp);
+	(*i) += ft_strlen(pid_string) - 1;
+	(*s) = new_s;
+	free(tmp);
     free(pid_string);
     return (0);
 }
@@ -279,26 +273,39 @@ int	put_env_var(char **s, int *i, char **envp)
 	char *word;
 	char *env_value;
 	int j;
+	char *new_s;
+	char *tmp;
 	word = NULL;
-	(*i)++;
-	while (!ft_strchr("$<>\"'| ", (*s)[(*i)]))
+	int k;
+
+	k = (*i) + 1;
+	while (!ft_strchr("$<>\"'| ", (*s)[k]))
 	{
-		word = add_char_to_string(word, (*s)[(*i)]);
-		(*i)++;
+		word = add_char_to_string(word, (*s)[k]);
+		k++;
 	}
 	printf("_%s_\n", word);
 	j = var_exist(word, envp);
-	printf("mon j:  %d\n", j);
 	if (j >= 0)
 	{
 		env_value = get_env_value(envp[j]);
-		printf("mon env_value: %s\n", env_value);
-		put_in_the_middle(s, i, ft_strlen(env_value), env_value);
+		tmp = ft_strdup((*s) + (*i) + ft_strlen(word) + 1);
+		new_s = ft_strndup((*s), (size_t)((*i) + 1));
+		new_s = ft_concat(new_s, env_value);
+		new_s = ft_concat(new_s, tmp);
+		(*i) += ft_strlen(env_value) - 1;
+		(*s) = new_s;
 	}
 	else
 	{
-		put_in_the_middle(s, i, 1, " ");
+		tmp = ft_strdup((*s) + (*i) + ft_strlen(word) + 1);
+		new_s = ft_strndup((*s), (size_t)((*i) + 1));
+		new_s = ft_concat(new_s, " ");
+		new_s = ft_concat(new_s, tmp);
+		(*i) += ft_strlen(" ") - 1;
+		(*s) = new_s;
 	}
+	free(tmp);
 	free(word);
 	return (0);
 }
@@ -314,7 +321,7 @@ void    replace_dollar(char **s, int *i, char **envp)
 {
         if ((*s)[(*i)] == '$' )
         {
-            if (!double_dollar(s, i) || !put_env_var(s, i, envp))
+            if (!double_dollar(s, i) || !single_dollar((*s)[(*i) + 1]) || !put_env_var(s, i, envp))
 				;
         }
 }
@@ -324,12 +331,13 @@ int main(int argc, char **argv, char **envp)
     int i;
 
     i = 0;
-    char *s = "bliblaboui$bonjour a toi comment vas tu";
+    char *s = "bliblaboui$bonjour a toi $$comment vas tu";
 	while (s[i])
 	{
     	if (s[i] == '$')
 		{
         	replace_dollar(&s, &i, envp);
+			s[i] = 'U';
 		}
 		i++;
 	}
