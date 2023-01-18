@@ -57,6 +57,10 @@ typedef struct s_shell
 	char		*line;
 	char		**env;
 	t_token		*tokens;
+	int			infile;
+	char		*heredoc;
+	int			outfile;
+	t_list		*cmd;
 
 }	t_shell;
 
@@ -71,4 +75,5 @@ t_token	*last(t_token *start);
 void	add_back(t_token **start, t_token *new);
 char	*substr(char *s, int start, int end);
 t_token	*new_token(char *s, t_type genre);
+void	*xmalloc(size_t size);
 #endif

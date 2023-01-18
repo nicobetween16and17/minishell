@@ -48,7 +48,6 @@ char	*get_env(char *s, char **env)
 	while (env[i][j] != '=')
 		++j;
 	j++;
-	//printf("REPLACEMENT IS %s\n", env[i]);
 	return (env[i] + j);
 }
 
@@ -88,9 +87,9 @@ char	*replace(char *str, char *search, char *replace)
 		str++;
 	}
 	res[i] = 0;
-	//printf("REPLACE LINE IS %s\n", res);
 	return (res);
 }
+
 
 int	is_expandable(char *s, int i, int open)
 {
@@ -111,11 +110,7 @@ int	is_expandable(char *s, int i, int open)
 		return (sgl || dbl);
 	return (!sgl);
 }
-void	display(char **env, int i)
-{
-	while (env[++i])
-		printf("%d: %s\n", i, env[i]);
-}
+
 void	replace_words(t_shell *shell, int i, int j)
 {
 	char *tmp;
@@ -124,25 +119,20 @@ void	replace_words(t_shell *shell, int i, int j)
 	while (shell->line && shell->line[++i])
 	{
 		if (shell->line[i] == '$' && is_expandable(shell->line, i, 0)
-			&& shell->line[i + 1] != '$' && shell->line[i + 1] != '/'
+			&& shell->line[i + 1] != '/'
 			&& shell->line[i + 1] != ' ' && shell->line[i + 1] != '.'
 			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"')
 		{
 			tmp2 = shell->line;
 			j = i + 1;
-			while (shell->line && shell->line[j] != '$'
-				&& shell->line[j] != '/' && shell->line[j] != ' '
+			while (shell->line[j] != '/' && shell->line[j] != ' '
 				&& shell->line[j] != '.' && shell->line[j] != '\''
 				&& shell->line[j] != '\"')
 				j++;
 			tmp = ft_substr(shell->line, i, j - i);
-			//printf("SUBSTRING IS %s\n", tmp);
-			display(shell->env, -1);
 			shell->line = replace(shell->line, tmp, get_env(tmp + 1, shell->env));
-			//printf("FINAL RESULT %s\n", shell->line);
 			free(tmp2);
 			free(tmp);
-			printf("-------------------\n");
 		}
 	}
 }
@@ -157,7 +147,6 @@ void	handle_history(t_shell *shell)
 	printf("PRE REPLACEMENT %s\n", shell->line);
 	replace_words(shell, -1, 0);
 	printf("POST REPLACEMENT %s\n", shell->line);
-	exit(0);
 	shell->tokens = parse(shell->line);
 	while (shell->tokens)
 	{
@@ -185,9 +174,13 @@ void	handle(int sig)
 int	main(int ac, char **av, char **env)
 {
 	t_shell shell;
+
 	shell.env = env;
+	shell.cmd = NULL;
 	while (1)
 	{
+		shell.infile = 0;
+		shell.outfile = 1;
 		handle_history(&shell);
 	}
 }

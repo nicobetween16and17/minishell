@@ -16,16 +16,30 @@
 #include "minishl.h"
 #include "libft/libft.h"
 
-typedef struct path
+
+void display(t_list *test)
 {
-	int	coins;
-	int	exit;
-}	t_path;
+	while (test)
+	{
+		printf("test = %s\n", (char *)test->content);
+		test = test->next;
+	}
 
-
+}
+void	adding(t_list *test)
+{
+	test = ft_lstnew("test");
+	ft_lstadd_back(&test, ft_lstnew("test0"));
+	ft_lstadd_back(&test, ft_lstnew("test1"));
+	display(test);
+}
 int	main(int ac, char **av, char **env)
 {
-	char *test = "\"la s'tri'ng\"'l'autre string'";
-	printf("%d\n", is_expandable(test, strlen(test), 1));
-	printf("%d\n", is_expandable(test, 4, 0));
+	t_list *test;
+
+	test = NULL;
+	adding(test);
+	printf("adding is finished\n");
+	display(test);
+	printf("display is finihed\n");
 }
