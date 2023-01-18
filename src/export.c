@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbierny <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: gbierny <gbierny@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 22:18:13 by gbierny           #+#    #+#             */
-/*   Updated: 2023/01/10 22:18:57 by gbierny          ###   ########.fr       */
+/*   Updated: 2023/01/17 20:02:57 by gbierny          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishl.h"
+#include "../include/minishl.h"
 
 
 char *ft_strndup(char *s, size_t n)
 {
-    int i;
+    size_t i;
     char *new_s;
     i = 0;
     while (s[i] && i < n)
@@ -29,39 +29,6 @@ char *ft_strndup(char *s, size_t n)
     ft_strlcpy(new_s, s, i);
     new_s[i] = 0;
     return (new_s);
-}
-
-void    export(char **tab_s, char **envp)
-{
-    int i;
-
-    i = 0;
-    if (!tab_s)
-    {
-       env_in_alphabetic_order();
-       return (0);
-    }
-    while (tab_s[i])
-    {
-        envp = change_var(tab_s[i], envp);
-        i++;
-    }
-}
-
-char *name_env_var(char *s)
-{
-    int i;
-    char *new;
-    i = 0;
-    while (s[i] && s[i] != '=')
-        i++;
-    if (s[i] != '=')
-    {
-        printf("not a valid identifier");
-        exit(0);
-    }
-    new = ft_strndup(s, i + 1);
-    return (new);
 }
 
 char **add_back_tab(char **tab, char *s)
@@ -78,24 +45,6 @@ char **add_back_tab(char **tab, char *s)
     new_tab[i] = ft_strdup(s);
     new_tab[i + 1] = NULL;
     return (new_tab);
-}
-
-char **change_var(char *s, char **envp)
-{
-    int i;
-
-    i = 0;
-    i = check_arg(s);
-    if (i < 0)
-        return (envp);
-    i = -1;
-    while (envp[++i])
-    {
-        if (!ft_strncmp(name_env_var(s), name_env_var(envp[i]), ft_strlen(s)))
-            envp = erase_env_var(i, envp);
-    }
-    envp = add_back_tab(envp, s);
-    return (envp);
 }
 
 char **erase_env_var(int i, char **envp)
@@ -136,4 +85,55 @@ int check_arg(char *s)
     if (s[i] == 0)
         return (-1);
     return (i);
+}
+
+char *name_env_var(char *s)
+{
+    int i;
+    char *new;
+    i = 0;
+    while (s[i] && s[i] != '=')
+        i++;
+    if (s[i] != '=')
+    {
+        printf("not a valid identifier");
+        exit(0);
+    }
+    new = ft_strndup(s, i + 1);
+    return (new);
+}
+
+char **change_var(char *s, char **envp)
+{
+    int i;
+
+    i = 0;
+    i = check_arg(s);
+    if (i < 0)
+        return (envp);
+    i = -1;
+    while (envp[++i])
+    {
+        if (!ft_strncmp(name_env_var(s), name_env_var(envp[i]), ft_strlen(s)))
+            envp = erase_env_var(i, envp);
+    }
+    envp = add_back_tab(envp, s);
+    return (envp);
+}
+
+void    export(char **tab_s, char **envp)
+{
+    int i;
+
+    i = 0;
+    if (!tab_s)
+    {
+       env_in_alphabetic_order(envp);
+       return ;
+    }
+    while (tab_s[i])
+    {
+        envp = change_var(tab_s[i], envp);
+        i++;
+    }
 }
