@@ -60,27 +60,23 @@ char	*empty_freeable_string()
 	return (str);
 }
 
-char	*replace(char *str, char *search, char *replace)
+char	*replace(char *str, char *start, char *end, char *replace)
 {
 	char	*res;
-	char	*start;
 	int		i;
 
 	i = 0;
-	if (strlen(search) <= 1)
+	if ((end - start) <= 1)
 		return (empty_freeable_string());
-	search++;
-	start = ft_strnstr(str, search, ft_strlen(str));
 	res = malloc(sizeof(char) * (ft_strlen(str)
-		- ft_strlen(search) + ft_strlen(replace) + 1));
+		- (end - start) + ft_strlen(replace) + 1));
 	while (str && *str)
 	{
 		if (str == start)
 		{
-			i--;
 			while (replace && *replace)
 				res[i++] = *(replace++);
-			str += ft_strlen(search);
+			str += (end - start);
 		}
 		if (*str)
 			res[i++] = *str;
@@ -111,15 +107,15 @@ int	is_expandable(char *s, int i, int open)
 	return (!sgl);
 }
 
-void	replace_words(t_shell *shell, int i, int j)
+void	replace_words(t_shell *shell, int i, int j)//TODO echo $USER'$USER'"$USER" does not work !!!!
 {
-	char *tmp;
 	char *tmp2;
+	char *tmp;
 
 	while (shell->line && shell->line[++i])
 	{
 		if (shell->line[i] == '$' && is_expandable(shell->line, i, 0)
-			&& shell->line[i + 1] != '/'
+			&& shell->line[i + 1] != '/' && shell->line[i + 1] != '$'
 			&& shell->line[i + 1] != ' ' && shell->line[i + 1] != '.'
 			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"')
 		{
@@ -127,16 +123,15 @@ void	replace_words(t_shell *shell, int i, int j)
 			j = i + 1;
 			while (shell->line[j] != '/' && shell->line[j] != ' '
 				&& shell->line[j] != '.' && shell->line[j] != '\''
-				&& shell->line[j] != '\"')
+				&& shell->line[j] != '\"' && shell->line[j] != '$')
 				j++;
 			tmp = ft_substr(shell->line, i, j - i);
-			shell->line = replace(shell->line, tmp, get_env(tmp + 1, shell->env));
+			shell->line = replace(shell->line, shell->line + i, shell->line + j, get_env(tmp + 1, shell->env));
 			free(tmp2);
 			free(tmp);
 		}
 	}
 }
-
 
 void	handle_history(t_shell *shell)
 {
@@ -147,14 +142,7 @@ void	handle_history(t_shell *shell)
 	printf("PRE REPLACEMENT %s\n", shell->line);
 	replace_words(shell, -1, 0);
 	printf("POST REPLACEMENT %s\n", shell->line);
-	shell->tokens = parse(shell->line);
-	while (shell->tokens)
-	{
-		printf("--------\n");
-		printf("%s %s\n", ft_strtrim(shell->tokens->s, " "), get_token(shell->tokens->genre));
-		//free(shell->tokens->s);
-		shell->tokens = shell->tokens->next;
-	}
+	parse(shell->line, shell);
 	//system("leaks a.out");
 
 
