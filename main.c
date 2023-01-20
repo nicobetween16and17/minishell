@@ -107,7 +107,7 @@ int	is_expandable(char *s, int i, int open)
 	return (!sgl);
 }
 
-void	replace_words(t_shell *shell, int i, int j)//TODO echo $USER'$USER'"$USER" does not work !!!!
+void	replace_words(t_shell *shell, int i, int j)
 {
 	char *tmp2;
 	char *tmp;
@@ -117,13 +117,15 @@ void	replace_words(t_shell *shell, int i, int j)//TODO echo $USER'$USER'"$USER" 
 		if (shell->line[i] == '$' && is_expandable(shell->line, i, 0)
 			&& shell->line[i + 1] != '/' && shell->line[i + 1] != '$'
 			&& shell->line[i + 1] != ' ' && shell->line[i + 1] != '.'
-			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"')
+			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"'
+			&& shell->line[i + 1] != '|')
 		{
 			tmp2 = shell->line;
 			j = i + 1;
 			while (shell->line[j] != '/' && shell->line[j] != ' '
 				&& shell->line[j] != '.' && shell->line[j] != '\''
-				&& shell->line[j] != '\"' && shell->line[j] != '$')
+				&& shell->line[j] != '\"' && shell->line[j] != '$'
+				&& shell->line[j] != '|')
 				j++;
 			tmp = ft_substr(shell->line, i, j - i);
 			shell->line = replace(shell->line, shell->line + i, shell->line + j, get_env(tmp + 1, shell->env));
@@ -143,6 +145,17 @@ void	handle_history(t_shell *shell)
 	replace_words(shell, -1, 0);
 	printf("POST REPLACEMENT %s\n", shell->line);
 	parse(shell->line, shell);
+	shell->cmd = shell->cmd->next;
+	while (shell->cmd)
+	{
+
+		char **crt;
+		crt = (char **)shell->cmd->content;
+		int i = -1;
+		while (crt[++i])
+			printf("cmd/arg %s\n", crt[i]);
+		shell->cmd = shell->cmd->next;
+	}
 	//system("leaks a.out");
 
 

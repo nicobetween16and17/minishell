@@ -66,7 +66,7 @@ void	setup_cmd2(t_list *new, t_shell *sh)
 		new = new->next;
 	}
 	current_cmd[i] = 0;
-	ft_lstadd_back(&sh->cmd, (void *)current_cmd);
+	ft_lstadd_back(&sh->cmd, ft_lstnew(current_cmd));
 	if (new && new->next)
 		setup_cmd2(new->next, sh);
 }
@@ -120,5 +120,6 @@ void	parse(char *s, t_shell *sh)
 	}
 	utils.tmp = "";
 	utils.tokens = utils.tokens->next;
+	sh->cmd = ft_lstnew(NULL);
 	setup_cmd(utils.tokens, sh, utils.tmp);
 }
