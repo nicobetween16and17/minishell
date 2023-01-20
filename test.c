@@ -37,7 +37,6 @@ char *get_path(char *cmd) {
 void	exec_cmds(t_list *cmds, int fds[2], char **env)
 {
 	char	**crt;
-	int		new_fd[2];
 	int		i;
 	char	*cmd;
 	pid_t	pid;
