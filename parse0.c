@@ -54,7 +54,6 @@ void	setup_cmd2(t_list *new, t_shell *sh)
 
 	i = 0;
 	head = new;
-	sh->cmd = ft_lstnew(NULL);
 	while (new && ft_strncmp((char *)new->content, "|", 2) && ++i)
 		new = new->next;
 	current_cmd = xmalloc(sizeof(char *) * ++i);
