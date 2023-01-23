@@ -69,7 +69,7 @@ char	*replace(char *str, char *start, char *end, char *replace)
 	if ((end - start) <= 1)
 		return (empty_freeable_string());
 	res = malloc(sizeof(char) * (ft_strlen(str)
-		- (end - start) + ft_strlen(replace) + 1));
+								 - (end - start) + ft_strlen(replace) + 1));
 	while (str && *str)
 	{
 		if (str == start)
@@ -99,8 +99,8 @@ int	is_expandable(char *s, int i, int open)
 	while (s && s[++j] && j < i)
 	{
 		((!sgl && !dbl && s[j] == '\"' && ++dbl) || (!dbl && !sgl
-			&& s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"'
-			&& dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));
+													 && s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"'
+																				   && dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));
 	}
 	if (open)
 		return (sgl || dbl);
@@ -123,9 +123,9 @@ void	replace_words(t_shell *shell, int i, int j)
 			tmp2 = shell->line;
 			j = i + 1;
 			while (shell->line[j] != '/' && shell->line[j] != ' '
-				&& shell->line[j] != '.' && shell->line[j] != '\''
-				&& shell->line[j] != '\"' && shell->line[j] != '$'
-				&& shell->line[j] != '|')
+				   && shell->line[j] != '.' && shell->line[j] != '\''
+				   && shell->line[j] != '\"' && shell->line[j] != '$'
+				   && shell->line[j] != '|')
 				j++;
 			tmp = ft_substr(shell->line, i, j - i);
 			shell->line = replace(shell->line, shell->line + i, shell->line + j, get_env(tmp + 1, shell->env));
