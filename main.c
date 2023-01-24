@@ -98,9 +98,9 @@ int	is_expandable(char *s, int i, int open)
 	j = -1;
 	while (s && s[++j] && j < i)
 	{
-		((!sgl && !dbl && s[j] == '\"' && ++dbl) || (!dbl && !sgl
-													 && s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"'
-																				   && dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));
+		((!sgl && !dbl && s[j] == '\"' && ++dbl) || (!dbl && !sgl\
+		&& s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"'\
+		&& dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));\
 	}
 	if (open)
 		return (sgl || dbl);
@@ -138,24 +138,14 @@ void	replace_words(t_shell *shell, int i, int j)
 void	handle_history(t_shell *shell)
 {
 	//signal(SIGINT, handle);
+	int fd[2];
 	signal(SIGSEGV, handle);
 	shell->line = readline("minishell> ");
 	add_history(shell->line);
-	printf("PRE REPLACEMENT %s\n", shell->line);
 	replace_words(shell, -1, 0);
-	printf("POST REPLACEMENT %s\n", shell->line);
 	parse(shell->line, shell);
 	shell->cmd = shell->cmd->next;
-	while (shell->cmd)
-	{
-
-		char **crt;
-		crt = (char **)shell->cmd->content;
-		int i = -1;
-		while (crt[++i])
-			printf("cmd/arg %s\n", crt[i]);
-		shell->cmd = shell->cmd->next;
-	}
+	exec_cmds(shell, shell->cmd);
 	//system("leaks a.out");
 
 

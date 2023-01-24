@@ -82,16 +82,16 @@ void	setup_cmd(t_list *tokens, t_shell *shell, char *f)
 			f = (char *)tokens->next->content;
 		if (!ft_strncmp((char *)tokens->content, "<", 2))
 		{
-			shell->infile = open(f, O_RDWR);
+			shell->outfile = open(f, O_RDWR);
 			if (shell->infile == -1 && shell->infile++)
 				printf("%s: permission denied\n", f);
 		}
 		else if (!ft_strncmp((char *)tokens->content, "<<", 3))
 			shell->heredoc = NULL;
 		else if (!ft_strncmp((char *)tokens->content, ">", 2))
-			shell->outfile = open(f, O_RDWR | O_CREAT | O_APPEND, 0644);
+			shell->infile = open(f, O_RDWR | O_CREAT | O_APPEND, 0644);
 		else if (!ft_strncmp((char *)tokens->content, ">>", 3))
-			shell->outfile = open(f, O_RDWR | O_APPEND | O_CREAT, 0644);
+			shell->infile= open(f, O_RDWR | O_APPEND | O_CREAT, 0644);
 		else if (ft_strncmp((char *)tokens->content, f, ft_strlen(f + 1)))
 			ft_lstadd_back(&new, ft_lstnew(tokens->content));
 		tokens = tokens->next;
