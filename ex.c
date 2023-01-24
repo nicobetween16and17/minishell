@@ -22,7 +22,7 @@ char *get_path(char *cmd) {
 	free(paths);
 	return (res);
 }
-typedef struct s_pipe
+/*typedef struct s_pipe
 {
 	char	**crt;
 	char	*cmd;
@@ -32,7 +32,7 @@ typedef struct s_pipe
 	int		fd[200][2];
 	int		status;
 }t_pipe;
-
+*/
 void init_pipe(t_pipe *pipex, t_list *cmds)
 {
 	pipex->n = 0;
@@ -57,15 +57,17 @@ void	exec_cmds(t_list *cmds, char **env)
 		pipex.pid = fork();
 		if (pipex.pid == 0)
 		{
-			dup2(pipex.fd[pipex.n][1], 1);
-			(pipex.n && dup2(pipex.fd[pipex.n - 1][0], 0));
+			if (pipex.n < pipex.len - 1 && dup2(pipex.fd[pipex.n][1], 1) < 0)
+				exit(1);
+			if (pipex.n && dup2(pipex.fd[pipex.n - 1][0], 0) < 0)
+				exit(1);
 			execve(pipex.cmd, pipex.crt, env);
 		}
 		waitpid(pipex.pid, &pipex.status, 0);
-		if (close(pipex.fd[pipex.n][1]))
-			exit(1);
+		if (pipex.n < pipex.len - 1 && close(pipex.fd[pipex.n][1]))
+			exit(0);
 		if (pipex.n && close(pipex.fd[pipex.n - 1][0]))
-			exit(1);
+			exit(0);
 		cmds = cmds->next;
 		pipex.n++;
 		free(pipex.cmd);
