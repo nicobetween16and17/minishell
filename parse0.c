@@ -87,7 +87,7 @@ void	setup_cmd(t_list *tokens, t_shell *shell, char *f)
 				printf("%s: permission denied\n", f);
 		}
 		else if (!ft_strncmp((char *)tokens->content, "<<", 3))
-			shell->heredoc = NULL;
+			shell->infile = here_doc(f);
 		else if (!ft_strncmp((char *)tokens->content, ">", 2))
 			shell->infile = open(f, O_RDWR | O_CREAT | O_APPEND, 0644);
 		else if (!ft_strncmp((char *)tokens->content, ">>", 3))

@@ -37,7 +37,8 @@ typedef struct s_pipe
 {
 	char	**crt;
 	char	*cmd;
-	pid_t	pid;
+	pid_t	pid[200];
+	int		nb_pid;
 	int		len;
 	int		n;
 	int		fd[200][2];
@@ -67,4 +68,15 @@ void	setup_cmd(t_list *tokens, t_shell *shell, char *f);
 void	parse(char *s, t_shell *sh);
 char	*sub(char *s, int len);
 void	exec_cmds(t_shell *shell, t_list *cmds);
+void	ft_exit(char **params, t_shell *shell);
+void	ft_export(char **params, t_shell *shell);
+void	ft_unset(char **params, t_shell *shell);
+void	ft_env(char **params, t_shell *shell);
+void	ft_pwd(char **params, t_shell *shell);
+void	ft_echo(char **params, t_shell *shell);
+void	ft_cd(char **params, t_shell *shell);
+void	env_in_alphabetic_order(char **envp);
+int		here_doc(char *delimiter);
+int		is_builtin(char *cmd, char **params, t_shell *shell);
+char	*get_path(char *cmd);
 #endif

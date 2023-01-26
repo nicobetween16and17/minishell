@@ -1,7 +1,13 @@
 #include "minishl.h"
 
 void	handle(int signal);
-
+void	ft_exit(char **params, t_shell *shell)
+{
+	(void)params;
+	(void)shell;
+	ft_putstr_fd("\nexit\n", 1);
+	exit(g_err);
+}
 int	contain(char c, char *s)
 {
 	int	i;
@@ -128,24 +134,45 @@ void	replace_words(t_shell *shell, int i, int j)
 				   && shell->line[j] != '|')
 				j++;
 			tmp = ft_substr(shell->line, i, j - i);
-			shell->line = replace(shell->line, shell->line + i, shell->line + j, get_env(tmp + 1, shell->env));
+			shell->line = replace(shell->line, shell->line + i, \
+			shell->line + j, get_env(tmp + 1, shell->env));
 			free(tmp2);
 			free(tmp);
 		}
 	}
 }
+void	handle_cmd(t_shell *shell)
+{
+	pid_t	pid;
+	char	*cmd;
 
+	if (ft_lstsize(shell->cmd) < 2)
+	{
+		if (!is_builtin(*(char **)shell->cmd->content, (char **)shell->cmd->content, shell))
+		{
+			cmd = get_path(*(char **)(shell->cmd->content));
+			pid = fork();
+			if (!pid)
+				execve(cmd, (char **)shell->cmd->content, shell->env);
+			free(cmd);
+			wait(&pid);
+		}
+	}
+	else
+		exec_cmds(shell, shell->cmd);
+}
 void	handle_history(t_shell *shell)
 {
 	//signal(SIGINT, handle);
-	int fd[2];
+
+
 	signal(SIGSEGV, handle);
 	shell->line = readline("minishell> ");
 	add_history(shell->line);
 	replace_words(shell, -1, 0);
 	parse(shell->line, shell);
 	shell->cmd = shell->cmd->next;
-	exec_cmds(shell, shell->cmd);
+	handle_cmd(shell);
 	//system("leaks a.out");
 
 
@@ -174,4 +201,5 @@ int	main(int ac, char **av, char **env)
 		shell.outfile = 1;
 		handle_history(&shell);
 	}
+	return (0);
 }

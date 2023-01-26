@@ -1,7 +1,4 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include "Libft/libft.h"
-#include <stdio.h>
+#include "minishl.h"
 
 int	only_n(char *flag)
 {
@@ -26,19 +23,22 @@ void	display_echo(char **av, int i)
 	}
 }
 
-int	echo(char **to_display, char **env)
+void	ft_echo(char **to_display, t_shell *shell)
 {
 	int	new_line;
 	int	i;
 
+	(void)shell;
 	new_line = 1;
 	if (to_display && to_display[0][0] == '-' && only_n(to_display[0]))
+	{
+		to_display++;
 		new_line = 0;
+	}
 	i = 0;
 	if (!new_line)
 		i++;
-	display_echo(to_display, i, env);
+	display_echo(to_display, i);
 	if (new_line)
 		write(1, "\n", 1);
-	return (0);
 }

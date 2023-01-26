@@ -38,6 +38,7 @@ char	*get_path(char *cmd)
 
 void	init_pipe(t_pipe *pipex, t_list *cmds)
 {
+	pipex->nb_pid = 0;
 	pipex->n = 0;
 	pipex->len = ft_lstsize(cmds);
 	while (pipex->n < pipex->len - 1)
@@ -48,7 +49,7 @@ void	init_pipe(t_pipe *pipex, t_list *cmds)
 	pipex->n = 0;
 }
 
-int exec_builtin(void (*f), char **params, t_shell *shell)
+int exec_builtin(void (*f)(char **, t_shell *), char **params, t_shell *shell)
 {
 	f(params, shell);
 	return (1);
@@ -70,7 +71,7 @@ int	is_builtin(char *cmd, char **params, t_shell *shell)
 		return (exec_builtin(&ft_export, params, shell));
 	else if (!ft_strncmp(cmd, "exit", 5))
 		return (exec_builtin(&ft_exit, params, shell));
-	return (0)
+	return (0);
 }
 
 void	exec_cmds(t_shell *shell, t_list *cmds)
@@ -82,8 +83,8 @@ void	exec_cmds(t_shell *shell, t_list *cmds)
 	{
 		pipex.crt = (char **)cmds->content;
 		pipex.cmd = get_path(pipex.crt[0]);
-		pipex.pid = fork();
-		if (pipex.pid == 0)
+		pipex.pid[pipex.nb_pid] = fork();
+		if (pipex.pid[pipex.nb_pid] == 0)
 		{
 			if (pipex.n < pipex.len - 1 && dup2(pipex.fd[pipex.n][1], shell->outfile) < 0)
 				exit(1);
@@ -92,13 +93,18 @@ void	exec_cmds(t_shell *shell, t_list *cmds)
 			if (!is_builtin(pipex.crt[0], pipex.crt, shell))
 				execve(pipex.cmd, pipex.crt, shell->env);
 		}
-		waitpid(pipex.pid, &pipex.status, 0);
+
 		if (pipex.n < pipex.len - 1 && close(pipex.fd[pipex.n][1]))
 			exit(1);
 		if (pipex.n && close(pipex.fd[pipex.n - 1][0]))
 			exit(1);
 		cmds = cmds->next;
 		pipex.n++;
+		pipex.nb_pid++;
 		free(pipex.cmd);
 	}
+	int i = 0;
+	while (i < pipex.nb_pid)
+		waitpid(pipex.pid[i++], &pipex.status, 0);
+
 }

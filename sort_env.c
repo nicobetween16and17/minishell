@@ -25,6 +25,29 @@ char *print_name_variable(char *s)
     return (s + i + 1);
 }
 
+char **switch_env_var(char **envp, int i, int j)
+{
+	char *tmp;
+
+	tmp = envp[i];
+
+	envp[i] = malloc(sizeof(char) * (ft_strlen(envp[j] + 1)));
+	if (!envp[i])
+	{
+		printf("malloc probleme");
+		exit(0);
+	}
+	envp[i] = envp[j];
+	envp[j] = malloc(sizeof(char) * (ft_strlen(tmp) + 1));
+	if (!envp[j])
+	{
+		printf("malloc error");
+		exit(0);
+	}
+	envp[j] = tmp;
+	return(envp);
+}
+
 void env_in_alphabetic_order(char **envp)
 {
     int i;
@@ -55,25 +78,3 @@ void env_in_alphabetic_order(char **envp)
     }
 }
 
-char **switch_env_var(char **envp, int i, int j)
-{
-    char *tmp;
-
-    tmp = envp[i];
-
-    envp[i] = malloc(sizeof(char) * (ft_strlen(envp[j] + 1)));
-    if (!envp[i])
-    {
-       printf("malloc probleme");
-        exit(0);
-    }
-    envp[i] = envp[j];
-    envp[j] = malloc(sizeof(char) * (ft_strlen(tmp) + 1));
-    if (!envp[j])
-    {
-       printf("malloc error");
-        exit(0);
-    }
-    envp[j] = tmp;
-    return(envp);
-}

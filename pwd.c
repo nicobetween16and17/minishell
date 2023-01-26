@@ -1,6 +1,13 @@
 #include "minishl.h"
-char *pwd()
+
+void ft_pwd(char **params, t_shell *shell)
 {
-	char buf[400];
-	return (getcwd(buf, 400));
+	char *buf;
+
+	(void)params;
+	(void)shell;
+	buf = getcwd(NULL, 0);
+	ft_putstr_fd(buf, 1);
+	write(1,"\n",1);
+	free(buf);
 }

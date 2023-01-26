@@ -1,12 +1,15 @@
 #include "minishl.h"
 
-void	cd(char *path)
+void	ft_cd(char **params, t_shell *shell)
 {
-	int dir;
+	int		dir;
+	char	*path;
 
-	if (!path)
-		return;
+	if (!params || !params[0] || !params[1])
+		return ;
+	path = params[1];
+	(void)shell;
 	dir = chdir(path);
 	if (dir)
-		printf("cd: string not in pwd: %s", path);
+		printf("cd: string not in pwd: %s\n", path);
 }

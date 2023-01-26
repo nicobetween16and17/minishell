@@ -6,7 +6,7 @@ int	iswhite_space(char c)
 	return (0);
 }
 
-check_beginning(char *s, int *i)
+void check_beginning(char *s, int *i)
 {
 	skip_space(&s);
 	if (ft_strchr("|()", s[(*i)]))
