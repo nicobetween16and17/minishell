@@ -13,7 +13,7 @@
 #include "minishl.h"
 
 
-char *ft_strndup(char *s, size_t n)
+char *ft_strndup(char *s, int n)
 {
     int i;
     char *new_s;

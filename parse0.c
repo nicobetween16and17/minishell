@@ -109,13 +109,13 @@ void	parse(char *s, t_shell *sh)
 	utils.cmd = 1;
 	while (s[utils.i])
 	{
-		(((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) && \
+		((((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) && \
 		!is_btwn_q(s, utils.i) && cut_until(s, &utils, NULL)) || \
 		(s[utils.i] == '|' && set_last(&utils, 1) && !is_btwn_q(s, utils.i) && \
 		cut_until(s, &utils, NULL)) || (utils.i == 0 && !is_btwn_q(s, utils.i) \
 		&& cut_until(s, &utils, " ")) || ((s[utils.i] == ' ' || !s[utils.i] || \
 		(utils.last && set_last(&utils, 0))) && !is_btwn_q(s, utils.i) && \
-		cut_until(s, &utils, " |<>") || ++utils.i));
+		cut_until(s, &utils, " |<>")) || ++utils.i));
 	}
 	utils.tmp = "";
 	utils.tokens = utils.tokens->next;

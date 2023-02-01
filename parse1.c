@@ -39,7 +39,7 @@ char	*sub(char *s, int len)
 	u.nbq = 0;
 	u.i = -1;
 	while (s[++u.i])
-		if (!is_btwn_q(s, u.i) && s[u.i] == '\"' || s[u.i] == '\'')
+		if (!is_btwn_q(s, u.i) && (s[u.i] == '\"' || s[u.i] == '\''))
 			u.nbq++;
 	u.i = -1;
 	u.sub = malloc(sizeof(char) * (len + 1 - u.nbq));

@@ -41,10 +41,12 @@ void	init_pipe(t_pipe *pipex, t_list *cmds)
 	pipex->nb_pid = 0;
 	pipex->n = 0;
 	pipex->len = ft_lstsize(cmds);
+	if (pipex->len > 400)
+		return ;
 	while (pipex->n < pipex->len - 1)
 	{
 		if (pipe(pipex->fd[pipex->n++]))
-			exit(1);
+			printf("pipe fail\n");
 	}
 	pipex->n = 0;
 }
@@ -79,11 +81,15 @@ void	exec_cmds(t_shell *shell, t_list *cmds)
 	t_pipe	pipex;
 
 	init_pipe(&pipex, cmds);
+	if (pipex.len > 400)
+		return ;
 	while (cmds)
 	{
 		pipex.crt = (char **)cmds->content;
 		pipex.cmd = get_path(pipex.crt[0]);
 		pipex.pid[pipex.nb_pid] = fork();
+		if (pipex.pid[pipex.nb_pid] == -1)
+			printf("%d fail fork\n", pipex.nb_pid);
 		if (pipex.pid[pipex.nb_pid] == 0)
 		{
 			if (pipex.n < pipex.len - 1 && dup2(pipex.fd[pipex.n][1], shell->outfile) < 0)
@@ -93,7 +99,6 @@ void	exec_cmds(t_shell *shell, t_list *cmds)
 			if (!is_builtin(pipex.crt[0], pipex.crt, shell))
 				execve(pipex.cmd, pipex.crt, shell->env);
 		}
-
 		if (pipex.n < pipex.len - 1 && close(pipex.fd[pipex.n][1]))
 			exit(1);
 		if (pipex.n && close(pipex.fd[pipex.n - 1][0]))
@@ -102,9 +107,19 @@ void	exec_cmds(t_shell *shell, t_list *cmds)
 		pipex.n++;
 		pipex.nb_pid++;
 		free(pipex.cmd);
+	}int i = 0;
+	/*while (i < pipex.n - 1)
+	{
+		close(pipex.fd[i][0]);
+		close(pipex.fd[i][1]);
 	}
-	int i = 0;
+*/
+	i = 0;
+	//printf("need closing %d\n", pipex.nb_pid);
 	while (i < pipex.nb_pid)
 		waitpid(pipex.pid[i++], &pipex.status, 0);
 
+	//printf("received every signals\n");
+
+	//printf("finished everything\n");
 }

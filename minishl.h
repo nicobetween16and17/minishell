@@ -37,11 +37,11 @@ typedef struct s_pipe
 {
 	char	**crt;
 	char	*cmd;
-	pid_t	pid[200];
+	pid_t	pid[400];
 	int		nb_pid;
 	int		len;
 	int		n;
-	int		fd[200][2];
+	int		fd[400][2];
 	int		status;
 }	t_pipe;
 

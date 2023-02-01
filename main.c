@@ -166,13 +166,18 @@ void	handle_history(t_shell *shell)
 	//signal(SIGINT, handle);
 
 
-	signal(SIGSEGV, handle);
+	//signal(SIGSEGV, handle);
 	shell->line = readline("minishell> ");
+	//printf("1\n");
 	add_history(shell->line);
+	//printf("2\n");
 	replace_words(shell, -1, 0);
+	//printf("3\n");
 	parse(shell->line, shell);
+	//printf("4\n");
 	shell->cmd = shell->cmd->next;
 	handle_cmd(shell);
+	//printf("stop\n");
 	//system("leaks a.out");
 
 
@@ -183,7 +188,7 @@ void	handle(int sig)
 	signal(SIGSEGV, handle);
 	if (sig == SIGSEGV)
 	{
-		printf("\n\033[0;31mSEGFAULT BAAAAH T'ES NUL\033[0m\n");
+		printf("segfaulf\n");
 		exit(0);
 	}
 	write(0, "\n", 1);
@@ -193,6 +198,8 @@ int	main(int ac, char **av, char **env)
 {
 	t_shell shell;
 
+	(void)ac;
+	(void)av;
 	shell.env = env;
 	shell.cmd = NULL;
 	while (1)
