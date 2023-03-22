@@ -12,60 +12,78 @@
 
 #include "minishl.h"
 
-t_token	*new_token(char *filename, char **cmds, int type)
+int	contain(char c, char *s)
 {
-	t_token	*new;
+	int	i;
 
-	new = malloc(sizeof(t_token));
-	if (!new)
+	i = -1;
+	if (c == '$')
+	{
+		while (s && s[++i])
+		{
+			if (s[i] == c && s[i + 1] != ' ')
+				return (1);
+		}
 		return (0);
-	new->filename = filename;
-	new->cmds = cmds;
-	new->type = type;
-	new->next = NULL;
+	}
+	while (s && s[++i])
+	{
+		if (s[i] == c)
+			return (1);
+	}
+	return (0);
+}
+
+int	find(char *env_line, char *to_find)
+{
+	int	i;
+
+	i = 0;
+	while (env_line[i] && ft_strncmp(env_line + i, to_find, ft_strlen(to_find)))
+		i++;
+	return (env_line[i]);
+}
+
+char	*empty_freeable_string(void)
+{
+	char	*str;
+
+	str = malloc(1);
+	str[0] = 0;
+	return (str);
+}
+
+int	check_arg(char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	if (s[i] == '=' && i == 0)
+	{
+		printf("invalid identifier");
+		exit(0);
+	}
+	if (s[i] == 0)
+		return (-1);
+	return (i);
+}
+
+char	*name_env_var(char *s)
+{
+	int		i;
+	char	*new;
+
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	if (s[i] != '=')
+	{
+		ft_putstr_fd(s, 2);
+		ft_putstr_fd(" : not a valid identifier\n", 2);
+		return (NULL);
+	}
+	new = ft_strndup(s, i + 1);
 	return (new);
-}
-
-int	token_size(t_token *lst)
-{
-	int		size;
-
-	size = 1;
-	if (!lst)
-		return (0);
-	while (lst->next)
-	{
-		lst = lst->next;
-		size++;
-	}
-	return (size);
-}
-
-t_token	*last_token(t_token *lst)
-{
-	if (!lst)
-		return (lst);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
-int	add_back(t_token **lst, t_token *new)
-{
-	t_token	*tmp;
-
-	if (*lst == NULL)
-		*lst = new;
-	else
-	{
-		tmp = last_token(*(lst));
-		tmp->next = new;
-	}
-	return (1);
-}
-
-int	next_token(t_list **token)
-{
-	*token = (*token)->next;
-	return (1);
 }

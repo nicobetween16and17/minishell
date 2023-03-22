@@ -36,7 +36,6 @@ char	*sub(char *s, int start, int len)
 {
 	t_utils2	u;
 
-	printf("%s %d\n", s + start, len);
 	u.f = 0;
 	u.j = 0;
 	u.nbq = 0;
@@ -48,7 +47,8 @@ char	*sub(char *s, int start, int len)
 	u.sub = xmalloc(sizeof(char) * (len + 1 - u.nbq));
 	while (s[++u.i] && u.i < start + len)
 	{
-		if (((!is_btwn_q(s, u.i) && s[u.i] != '\'' && s[u.i] != '\"' && s[u.i] != ' ') || is_btwn_q(s, u.i)))
+		if (((!is_btwn_q(s, u.i) && s[u.i] != '\'' && s[u.i] != '\"' && \
+		s[u.i] != ' ') || is_btwn_q(s, u.i)))
 			u.sub[u.j++] = s[u.i];
 	}
 	u.sub[u.j] = 0;

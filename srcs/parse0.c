@@ -27,8 +27,8 @@ int	cut_until(char *s, t_utils *utils, char *stop)
 	}
 	else
 	{
-		while (s[start + len] && (!is_charset(s[start + len], stop) ||
-				is_btwn_q(s, start + len)))
+		while (s[start + len] && (!is_charset(s[start + len], stop) || \
+		is_btwn_q(s, start + len)))
 			len++;
 	}
 	utils->tmp = sub(s, start, len);
@@ -46,25 +46,21 @@ int	set_last(t_utils *utils, int i)
 	return (1);
 }
 
-void	set_redir(char *f, t_list *tokens, t_token **new)
+t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
 {
-	if (!ft_strncmp((char *)tokens->content, "<", 2))
-		add_back(new, new_token(f, NULL, INPUT));
-	else if (!ft_strncmp((char *)tokens->content, "<<", 3))
-	{
-		here_doc(f);
-		add_back(new, new_token(f, NULL, HDOC));
-	}
-	else if (!ft_strncmp((char *)tokens->content, ">", 2))
-		add_back(new, new_token(f, NULL, TRUNC));
-	else if (!ft_strncmp((char *)tokens->content, ">>", 3))
-		add_back(new, new_token(f, NULL, APPEND));
+	char	**cmds;
+
+	cmds = cmds_malloc(t);
+	i = 0;
+	while (t && ft_strncmp((char *)t->content, "|", 2) \
+			&& ((char *)t->content)[0] != '>' && ((char *)t->content)[0] != '<')
+		(!(!(cmds[i++] = t->content)) && next_token(&t));
+	(!(cmds[i] = 0) && add_back(new, new_token(NULL, cmds, CMD)));
+	return (t);
 }
 
 void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 {
-	char	**cmds;
-
 	while (t)
 	{
 		if ((((char *)t->content)[0] == '>' || ((char *)t->content)[0] == '<'))
@@ -82,15 +78,7 @@ void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 			t = t->next;
 		}
 		else
-		{
-			cmds = cmds_malloc(t);
-			i = 0;
-			while (t && ft_strncmp((char *)t->content, "|", 2) \
-			&& ((char *)t->content)[0] != '>' && ((char *)t->content)[0] != '<')
-				(!(!(cmds[i++] = t->content)) && next_token(&t));
-			(!(cmds[i] = 0) && add_back(new, new_token(NULL, cmds, CMD)));
-		}
-
+			t = fill_cmd_tab(t, new, i);
 	}
 }
 
@@ -104,7 +92,7 @@ void	parse(char *s, t_shell *sh)
 	utils.cmd = 1;
 	while (s[utils.i])
 	{
-		((((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) &&\
+		((((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) && \
 		!is_btwn_q(s, utils.i) && cut_until(s, &utils, NULL)) || \
 		(s[utils.i] == '|' && set_last(&utils, 1) && !is_btwn_q(s, utils.i) && \
 		cut_until(s, &utils, NULL)) || (utils.i == 0 && !is_btwn_q(s, utils.i) \

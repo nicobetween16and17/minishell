@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse0.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
+/*   Updated: 2023/01/19 21:12:13 by niespana         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishl.h"
 
 void	*xmalloc(size_t size)
@@ -22,7 +34,7 @@ void	*cmds_malloc(t_list *new)
 
 int	nb_cmd(t_token *lst)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (lst)
@@ -34,12 +46,23 @@ int	nb_cmd(t_token *lst)
 	return (i);
 }
 
-void free_completed_tab(char **tab)
+void	free_completed_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (tab[++i])
 		free(tab[i]);
 	free(tab[i]);
+}
+
+int	ft_strisnum(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s && s[++i])
+		if (!ft_isdigit(s[i]))
+			return (0);
+	return (1);
 }

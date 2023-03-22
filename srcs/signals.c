@@ -12,26 +12,43 @@
 
 #include "minishl.h"
 
-void	ft_close(int fd)
+void	s_int(int value)
 {
-	if (fd >= 0)
-		close(fd);
+	(void)value;
+	if (g_signal.pid == 0)
+	{
+		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("\033[0;32m❌ minishell > \033[0m", 2);
+		g_signal.status = 1;
+	}
+	else
+	{
+		ft_putstr_fd("\n", 2);
+		g_signal.status = 130;
+	}
+	g_signal.s_int = 1;
 }
 
-void	reset_std(t_shell *sh)
+void	s_quit(int value)
 {
-	dup2(sh->in, 0);
-	dup2(sh->out, 1);
+	char	*nbr;
+
+	nbr = ft_itoa(value);
+	if (g_signal.pid != 0)
+	{
+		ft_putstr_fd("Quit: ", 2);
+		ft_putendl_fd(nbr, 2);
+		g_signal.status = 131;
+		g_signal.s_quit = 1;
+	}
+	free(nbr);
+	nbr = NULL;
 }
 
-void	close_fds(t_shell *sh)
+void	init_signal(void)
 {
-	ft_close(sh->infile);
-	ft_close(sh->outfile);
-}
-
-void	reset_fds(t_shell *sh)
-{
-	sh->infile = 0;
-	sh->outfile = 1;
+	g_signal.s_int = 0;
+	g_signal.s_quit = 0;
+	g_signal.pid = 0;
+	g_signal.status = 0;
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse0.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
+/*   Updated: 2023/01/19 21:12:13 by niespana         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishl.h"
 
 void	free_tab(char **tab, int i)
@@ -7,7 +19,7 @@ void	free_tab(char **tab, int i)
 	free(tab);
 }
 
-char *ft_strndup(char *s, int n)
+char	*ft_strndup(char *s, int n)
 {
 	int		i;
 	char	*new_s;
