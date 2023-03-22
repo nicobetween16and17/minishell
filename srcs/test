@@ -1,0 +1,23 @@
+token type is 5
+Makefile
+a.out
+cd.c
+echo.c
+env.c
+export.c
+fd.c
+heredoc.c
+jojo
+libft
+main.c
+minishl.h
+parse0.c
+parse1.c
+pipe.c
+pwd.c
+sort_env.c
+stop
+test
+token.c
+unset.c
+utils.c

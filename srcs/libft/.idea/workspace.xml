@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="Libft" targetName="re" />
+      <config projectName="Libft" targetName="all" />
+      <config projectName="Libft" targetName="fclean" />
+      <config projectName="Libft" targetName="libftprintf.a" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="07522eac-4cc2-4803-9873-e508bc621468" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../srcs/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cd.c" beforeDir="false" afterPath="$PROJECT_DIR$/../srcs/cd.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cd.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../echo.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../echo.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../export.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../export.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../heredoc.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../heredoc.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../main.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../minishl.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parse0.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parse0.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parse1.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../parse1.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pipe.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pipe.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pwd.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pwd.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sort_env.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sort_env.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/cd.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/dollar.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/export.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/heredoc.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/parsing.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/parsing2.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/parsing3.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/pipe.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/pipex.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/pwd.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/redirection.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/sort_env.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/syntaxe.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/unset.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_dir/prout.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_dir/test.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../unset.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../utils.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../utils.o" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MakefileLocalSettings">
+    <option name="availableProjects">
+      <map>
+        <entry>
+          <key>
+            <ExternalProjectPojo>
+              <option name="name" value="Libft" />
+              <option name="path" value="$PROJECT_DIR$" />
+            </ExternalProjectPojo>
+          </key>
+          <value>
+            <list>
+              <ExternalProjectPojo>
+                <option name="name" value="Libft" />
+                <option name="path" value="$PROJECT_DIR$" />
+              </ExternalProjectPojo>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$" value="RE_IMPORT" />
+      </map>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2LduM935zfmyVS5zC4ZQNIhAN3c" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RunManager" selected="Makefile Application.all">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="all" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Libft" TARGET_NAME="all" CONFIG_NAME="all" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="fclean" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Libft" TARGET_NAME="fclean" CONFIG_NAME="fclean" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="libftprintf.a" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Libft" TARGET_NAME="libftprintf.a" CONFIG_NAME="libftprintf.a" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="re" type="CLionNativeAppRunConfigurationType" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Libft" TARGET_NAME="re" CONFIG_NAME="re" version="1">
+      <method v="2">
+        <option name="CLION.COMPOUND.BUILD" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Makefile Application.all" />
+      <item itemvalue="Makefile Application.fclean" />
+      <item itemvalue="Makefile Application.re" />
+      <item itemvalue="Makefile Application.libftprintf.a" />
+    </list>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="07522eac-4cc2-4803-9873-e508bc621468" name="Changes" comment="" />
+      <created>1676213232997</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1676213232997</updated>
+      <workItem from="1676213234838" duration="1132000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
