@@ -87,10 +87,11 @@ typedef struct s_shell
 
 typedef struct	s_sig
 {
-	int				s_int;
-	int				s_quit;
-	int				status;
-	pid_t			pid;
+	int		s_int;
+	int		s_quit;
+	int		status;
+	pid_t	pid;
+	char	str_status[10];
 }	t_sig;
 
 t_sig g_signal;
@@ -156,5 +157,5 @@ int		check_arg(char *s);
 void	init_pipe(t_pipe *pipex, t_token *cmds);
 int		x_bi(char **cmd, int type, t_shell *sh);
 int		is_bi(char *cmd);
-int	nb_pipe(t_token *t);
+int		nb_pipe(t_token *t);
 #endif

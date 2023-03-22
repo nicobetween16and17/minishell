@@ -47,7 +47,6 @@ char	*shell_plus_one(const char *s)
 	while (s && s[i] && !ft_isdigit(s[i]))
 		i++;
 	right_side = ft_strdup(s + i);
-	printf("nb is %s\n", right_side);
 	if (!right_side)
 		return (0);
 	nb = ft_atoi(right_side) + 1;

@@ -76,11 +76,18 @@ void	env_in_alphabetic_order(char **envp)
 
 char	*get_env(char *s, char **env)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	char	*itoa_n;
 
+	itoa_n = ft_itoa(g_signal.status);
+	ft_bzero(g_signal.str_status, 9);
+	ft_strlcpy(g_signal.str_status, itoa_n, 9);
+	free(itoa_n);
 	j = 0;
 	i = 0;
+	if (!ft_strncmp("?", s, 2))
+		return (g_signal.str_status);
 	while (env[i] && !find(env[i], s))
 		i++;
 	if (!env[i])

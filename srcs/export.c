@@ -22,10 +22,7 @@ char	**erase_env_var(int i, char **envp)
 		j++;
 	new_envp = malloc(j * sizeof(char *));
 	if (!new_envp)
-	{
-		printf("malloc problem");
 		exit(0);
-	}
 	j = -1;
 	while (++j < i)
 		new_envp[j] = envp[j];
@@ -63,6 +60,8 @@ int	ft_unset(char **params, t_shell *shell)
 		check = check_arg(params[i]);
 		if (check > -1)
 			shell->env = erase_env_var(check, shell->env);
+		else if (ft_printf("invalid identifier\n"))
+			return (1);
 	}
 	return (0);
 }

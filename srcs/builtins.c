@@ -23,7 +23,7 @@ int	ft_cd(char **params, t_shell *shell)
 	(void)shell;
 	dir = chdir(path);
 	if (dir)
-		printf("cd: string not in pwd: %s\n", path);
+		ft_printf("cd: string not in pwd: %s\n", path);
 	return (0);
 }
 
@@ -81,10 +81,11 @@ int	ft_echo(char **args, t_shell *shell)
 int	ft_exit(char **params, t_shell *shell)
 {
 	shell->exit = 1;
+	ft_bzero(shell->folie, 10);
 	ft_putstr_fd("exit ", 2);
-	ft_strlcpy(shell->folie, "💚", 5);
+	ft_strlcpy(shell->folie, "✔️ ", 8);
 	if (params[1])
-		ft_strlcpy(shell->folie, "❤️", 5);
+		ft_strlcpy(shell->folie, "❌ ", 8);
 	ft_putendl_fd(shell->folie, 2);
 	if (params[1] && params[2])
 	{
@@ -96,7 +97,7 @@ int	ft_exit(char **params, t_shell *shell)
 		shell->ret = 255;
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(params[1], 2);
-		ft_putendl_fd(": numeric argument required", 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 	}
 	else if (params[1])
 		shell->ret = ft_atoi(params[1]);

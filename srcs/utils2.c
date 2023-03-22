@@ -61,10 +61,7 @@ int	check_arg(char *s)
 	while (s[i] && s[i] != '=')
 		i++;
 	if (s[i] == '=' && i == 0)
-	{
-		printf("invalid identifier");
-		exit(0);
-	}
+		return (-1);
 	if (s[i] == 0)
 		return (-1);
 	return (i);

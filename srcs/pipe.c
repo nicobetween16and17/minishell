@@ -48,7 +48,6 @@ char	*get_env_line(char **env, char *env_line)
 
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
-	printf("pipexec\n");
 	pipex->crt = cmds->cmds;
 	pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
 	pipex->pid[pipex->nb_pid] = fork();
