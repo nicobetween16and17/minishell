@@ -15,20 +15,23 @@
 char	**erase_env_var(int i, char **envp)
 {
 	int		j;
+	int		k;
 	char	**new_envp;
 
+	k = 0;
 	j = 0;
 	while (envp[j])
 		j++;
-	new_envp = malloc(j * sizeof(char *));
-	if (!new_envp)
-		exit(0);
+	new_envp = xmalloc(j * sizeof(char *));
 	j = -1;
-	while (++j < i)
-		new_envp[j] = envp[j];
 	while (envp[++j])
-		new_envp[j] = envp[j];
-	new_envp[j] = NULL;
+	{
+		if (j == i)
+			free(envp[i]);
+		else
+			new_envp[k++] = envp[j];
+	}
+	new_envp[k] = NULL;
 	return (new_envp);
 }
 
