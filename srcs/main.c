@@ -22,6 +22,19 @@ void	free_token(t_token *current)
 	current->filename = NULL;
 }
 
+char	*line_plus_space(t_shell *shell)
+{
+	char	*line;
+
+	line = xmalloc((ft_strlen(shell->line) + 1) * sizeof(char *));
+	ft_strlcpy(line, shell->line, ft_strlen(shell->line));
+	line[ft_strlen(shell->line)] = 32;
+	line[ft_strlen(shell->line) + 1] = 0;
+	free(shell->line);
+	shell->line = line;
+	return (line);
+}
+
 void	checkline(t_shell *shell)
 {
 	char	*line;
@@ -42,7 +55,7 @@ void	checkline(t_shell *shell)
 		if (is_expandable(line, ft_strlen(line), 1))
 			return ;
 		shell->line = line;
-		add_history(line);
+		add_history(line_plus_space(shell));
 		replace_words(shell, -1, 0);
 		parse(shell->line, shell);
 		shell->tokens = shell->tokens->next;
