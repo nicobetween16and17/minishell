@@ -55,8 +55,7 @@ void	checkline(t_shell *shell)
 		if (is_expandable(line, ft_strlen(line), 1))
 			return ;
 		shell->line = line;
-		line_plus_space(shell);
-		add_history(shell->line);
+		add_history(line_plus_space(shell));
 		replace_words(shell, -1, 0);
 		parse(shell->line, shell);
 		shell->tokens = shell->tokens->next;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishl.h                                           :+:      :+:    :+:  */
+/*                                                    +:+ +:+         +:+     */
+/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
+/*   Updated: 2023/01/19 21:12:13 by niespana         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHL_H
 # define MINISHL_H
-# define HEREDOC .heredoc.temp
+# define HEREDOC ".heredoc.temp"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -32,10 +44,10 @@ typedef struct s_utils
 
 typedef struct s_token
 {
-	char	*filename;
-	char	**cmds;
-	int		type;
-	struct s_token *next;
+	char			*filename;
+	char			**cmds;
+	int				type;
+	struct s_token	*next;
 }t_token;
 
 typedef struct s_utils2
@@ -59,7 +71,7 @@ typedef struct s_pipe
 	int		status;
 	int		i;
 	int		pipe_failed;
-	t_token *current;
+	t_token	*current;
 }	t_pipe;
 
 typedef struct s_shell
@@ -71,7 +83,7 @@ typedef struct s_shell
 	int			outfile;
 	int			in;
 	int			out;
-	int 		exit;
+	int			exit;
 	int			ret;
 	int			no_exec;
 	int			pipe_in;
@@ -85,7 +97,7 @@ typedef struct s_shell
 
 }	t_shell;
 
-typedef struct	s_sig
+typedef struct s_sig
 {
 	int		s_int;
 	int		s_quit;
@@ -94,7 +106,7 @@ typedef struct	s_sig
 	char	str_status[10];
 }	t_sig;
 
-t_sig g_signal;
+t_sig	g_signal;
 
 int		contain(char c, char *s);
 int		is_btwn_q(char *s, int i);

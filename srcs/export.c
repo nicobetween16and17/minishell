@@ -56,7 +56,6 @@ int check_exist(char *p, char **s)
 {
 	int	i;
 
-	printf("p = %s\n", p);
 	i = -1;
 	while (s[++i])
 	{
