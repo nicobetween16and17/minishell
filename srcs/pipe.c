@@ -19,6 +19,8 @@ char	*get_path(char *cmd, char *path)
 	char	*cmd_path;
 	char	*res;
 
+	if (!path)
+		return (0);
 	cmd_path = ft_strjoin("/", cmd);
 	i = -1;
 	paths = ft_split(path, ':');
@@ -46,30 +48,42 @@ char	*get_env_line(char **env, char *env_line)
 	return (env[i]);
 }
 
-void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
+void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 {
-	pipex->crt = cmds->cmds;
-	pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
-	pipex->pid[pipex->nb_pid] = fork();
-	if (pipex->pid[pipex->nb_pid] == -1)
-	{
-		pipex->pipe_failed = 1;
-		return ;
-	}
 	if (pipex->pid[pipex->nb_pid] == 0)
 	{
 		if (pipex->n < pipex->len - 1 && \
 		dup2(pipex->fd[pipex->n][1], shell->outfile) < 0)
 			exit(1);
+		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][0]))
+			exit(1);
 		if (pipex->n && dup2(pipex->fd[pipex->n - 1][0], shell->infile) < 0)
+			exit(1);
+		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][1]))
+			exit(1);
+		if (pipex->n && close(pipex->fd[pipex->n - 1][0]))
 			exit(1);
 		if (!x_bi(pipex->crt, is_bi(pipex->crt[0]), shell))
 			execve(pipex->cmd, pipex->crt, shell->env);
+		exit(0);
 	}
 	if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][1]))
 		exit(1);
 	if (pipex->n && close(pipex->fd[pipex->n - 1][0]))
 		exit(1);
+}
+
+void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
+{
+	pipex->crt = cmds->cmds;
+	if (access(cmds->cmds[0], X_OK))
+		pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
+	else
+		pipex->cmd = ft_strdup(pipex->crt[0]);
+	pipex->pid[pipex->nb_pid] = fork();
+	if (pipex->pid[pipex->nb_pid] == -1 && pipex->pipe_failed++)
+		return ;
+	pipe_exec2(shell, pipex);
 }
 
 void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
@@ -90,7 +104,7 @@ void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
 				pipe_exec(shell, pipex->current, pipex);
 				pipex->n++;
 				pipex->nb_pid++;
-				free(pipex->cmd);
+				//free(pipex->cmd);
 			}
 			reset_fds(shell);
 			reset_std(shell);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse0.c                                           :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -62,7 +62,7 @@ int check_exist(char *p, char **s)
 		if (!ft_strncmp(p, s[i], ft_strlen(p) - 1) && s[i][ft_strlen(p)] == '=')
 			return (i);
 	}
-	return (0);
+	return (-1);
 }
 
 int	ft_unset(char **params, t_shell *shell)
@@ -74,7 +74,7 @@ int	ft_unset(char **params, t_shell *shell)
 	while (params[++i])
 	{
 		check = check_exist(params[1], shell->env);
-		if (check)
+		if (check != -1)
 			shell->env = erase_env_var(check, shell->env);
 		else if (ft_printf("invalid identifier\n"))
 			return (1);

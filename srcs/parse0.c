@@ -53,7 +53,7 @@ t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
 	cmds = cmds_malloc(t);
 	i = 0;
 	while (t && ft_strncmp((char *)t->content, "|", 2) \
-			&& ((char *)t->content)[0] != '>' && ((char *)t->content)[0] != '<')
+			&& !only_redir((char *)t->content))
 		(!(!(cmds[i++] = t->content)) && next_token(&t));
 	(!(cmds[i] = 0) && add_back(new, new_token(NULL, cmds, CMD)));
 	return (t);
@@ -63,7 +63,7 @@ void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 {
 	while (t)
 	{
-		if ((((char *)t->content)[0] == '>' || ((char *)t->content)[0] == '<'))
+		if (only_redir((char *)t->content))
 		{
 			if (t->next)
 				f = (char *)t->next->content;

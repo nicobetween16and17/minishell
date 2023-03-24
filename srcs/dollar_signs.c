@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse0.c                                           :+:      :+:    :+:   */
+/*   dollar_signs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -66,14 +66,14 @@ void	replace_words(t_shell *shell, int i, int j)
 	while (shell->line && shell->line[++i])
 	{
 		if (shell->line[i] == '$' && is_expandable(shell->line, i, 0)
-			&& shell->line[i + 1] != '/' && shell->line[i + 1] != '$'
+			&& shell->line[i + 1] != '$'
 			&& shell->line[i + 1] != ' ' && shell->line[i + 1] != '.'
 			&& shell->line[i + 1] != '\'' && shell->line[i + 1] != '\"'
 			&& shell->line[i + 1] != '|')
 		{
 			tmp2 = shell->line;
 			j = i + 1;
-			while (shell->line[j] != '/' && shell->line[j] != ' ' \
+			while (shell->line[j] != ' ' \
 			&& shell->line[j] != '.' && shell->line[j] != '\'' \
 			&& shell->line[j] != '\"' && shell->line[j] != '$' \
 			&& shell->line[j] != '|')

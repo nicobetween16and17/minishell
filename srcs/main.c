@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse0.c                                           :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -25,14 +25,17 @@ void	free_token(t_token *current)
 char	*line_plus_space(t_shell *shell)
 {
 	char	*line;
+	int		i;
 
+	i = -1;
 	line = xmalloc((ft_strlen(shell->line) + 2) * sizeof(char *));
-	ft_strlcpy(line, shell->line, ft_strlen(shell->line) + 1);
-	line[ft_strlen(shell->line) + 1] = 32;
-	line[ft_strlen(shell->line) + 2] = 0;
+	while (shell->line[++i])
+		line[i] = shell->line[i];
+	line[i++] = 32;
+	line[i] = 0;
 	free(shell->line);
 	shell->line = line;
-	return (line);
+	return (shell->line);
 }
 
 void	checkline(t_shell *shell)
@@ -52,14 +55,16 @@ void	checkline(t_shell *shell)
 	{
 		if (g_signal.s_int == 1)
 			shell->ret = g_signal.status;
+		shell->line = line;
 		if (is_expandable(line, ft_strlen(line), 1))
 			return ;
-		shell->line = line;
-		add_history(line_plus_space(shell));
+		add_history(shell->line);
+		line_plus_space(shell);
 		replace_words(shell, -1, 0);
 		parse(shell->line, shell);
 		shell->tokens = shell->tokens->next;
-		free(line);
+		exec_cmds(shell, shell->tokens);
+		free(shell->line);
 		line = NULL;
 	}
 }
@@ -89,7 +94,6 @@ int	main(int ac, char **av, char **env)
 		shell.infile = 0;
 		shell.outfile = 1;
 		checkline(&shell);
-		exec_cmds(&shell, shell.tokens);
 		close_fds(&shell);
 		reset_std(&shell);
 		reset_fds(&shell);

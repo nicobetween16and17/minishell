@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse0.c                                           :+:      :+:    :+:   */
+/*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -42,6 +42,8 @@ void	set_redir(char *f, t_list *tokens, t_token **new)
 		add_back(new, new_token(f, NULL, TRUNC));
 	else if (!ft_strncmp((char *)tokens->content, ">>", 3))
 		add_back(new, new_token(f, NULL, APPEND));
+	else
+		ft_printf("Error syntax in redirection\n");
 }
 
 int	error_open(char *file, t_shell *sh)
@@ -74,4 +76,17 @@ void	redirect(t_shell *sh, char *f, int type)
 	else if (type == TRUNC)
 		sh->outfile = open(f, O_CREAT | O_WRONLY | O_TRUNC, 0700);
 	dup2(sh->outfile, 1);
+}
+
+int	only_redir(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if (s[i] != '>' && s[i] != '<')
+			return (0);
+	}
+	return (1);
 }

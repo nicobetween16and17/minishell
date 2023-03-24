@@ -170,4 +170,5 @@ void	init_pipe(t_pipe *pipex, t_token *cmds);
 int		x_bi(char **cmd, int type, t_shell *sh);
 int		is_bi(char *cmd);
 int		nb_pipe(t_token *t);
+int		only_redir(char *s);
 #endif
