@@ -171,4 +171,5 @@ int		x_bi(char **cmd, int type, t_shell *sh);
 int		is_bi(char *cmd);
 int		nb_pipe(t_token *t);
 int		only_redir(char *s);
+char	*get_env_line(char **env, char *env_line);
 #endif

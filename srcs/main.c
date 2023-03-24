@@ -62,10 +62,8 @@ void	checkline(t_shell *shell)
 		line_plus_space(shell);
 		replace_words(shell, -1, 0);
 		parse(shell->line, shell);
-		shell->tokens = shell->tokens->next;
-		exec_cmds(shell, shell->tokens);
+		exec_cmds(shell, shell->tokens->next);
 		free(shell->line);
-		line = NULL;
 	}
 }
 

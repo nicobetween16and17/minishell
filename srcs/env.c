@@ -85,3 +85,28 @@ char	**env_init(const char **env)
 	res[size] = 0;
 	return (res);
 }
+
+int	ft_env(char **params, t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (params && params[i])
+		i++;
+	if (i > 1)
+	{
+		ft_putstr_fd("env: ", 1);
+		ft_putstr_fd(params[0], 1);
+		ft_putstr_fd(": Permission denied\n", 1);
+	}
+	else
+	{
+		i = -1;
+		while (shell->env[++i])
+		{
+			ft_putstr_fd(shell->env[i], 1);
+			ft_putstr_fd("\n", 1);
+		}
+	}
+	return (0);
+}

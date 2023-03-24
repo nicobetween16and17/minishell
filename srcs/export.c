@@ -52,7 +52,7 @@ char	**change_var(char *s, char **envp)
 	return (envp);
 }
 
-int check_exist(char *p, char **s)
+int	check_exist(char *p, char **s)
 {
 	int	i;
 
@@ -94,30 +94,5 @@ int	ft_export(char **params, t_shell *shell)
 	}
 	while (params[++i])
 		shell->env = change_var(params[i], shell->env);
-	return (0);
-}
-
-int	ft_env(char **params, t_shell *shell)
-{
-	int	i;
-
-	i = 0;
-	while (params && params[i])
-		i++;
-	if (i > 1)
-	{
-		ft_putstr_fd("env: ", 1);
-		ft_putstr_fd(params[0], 1);
-		ft_putstr_fd(": Permission denied\n", 1);
-	}
-	else
-	{
-		i = -1;
-		while (shell->env[++i])
-		{
-			ft_putstr_fd(shell->env[i], 1);
-			ft_putstr_fd("\n", 1);
-		}
-	}
 	return (0);
 }

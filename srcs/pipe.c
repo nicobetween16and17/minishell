@@ -38,16 +38,6 @@ char	*get_path(char *cmd, char *path)
 	return (res);
 }
 
-char	*get_env_line(char **env, char *env_line)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] && ft_strncmp(env_line, env[i], ft_strlen(env_line)))
-		i++;
-	return (env[i]);
-}
-
 void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 {
 	if (pipex->pid[pipex->nb_pid] == 0)
@@ -104,7 +94,7 @@ void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
 				pipe_exec(shell, pipex->current, pipex);
 				pipex->n++;
 				pipex->nb_pid++;
-				//free(pipex->cmd);
+				free(pipex->cmd);
 			}
 			reset_fds(shell);
 			reset_std(shell);

@@ -97,3 +97,13 @@ char	*get_env(char *s, char **env)
 	j++;
 	return (env[i] + j);
 }
+
+char	*get_env_line(char **env, char *env_line)
+{
+	int	i;
+
+	i = 0;
+	while (env[i] && ft_strncmp(env_line, env[i], ft_strlen(env_line)))
+		i++;
+	return (env[i]);
+}
