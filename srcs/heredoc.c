@@ -12,6 +12,10 @@
 
 #include "minishl.h"
 
+/*
+ * read standard input and put it in a hidden file as long as the line is
+ * not uniquely composed of the stop word
+ */
 int	here_doc(char *delimiter)
 {
 	char	*buffer;

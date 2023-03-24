@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * create a new token and initiate the value with ones given
+ */
 t_token	*new_token(char *filename, char **cmds, int type)
 {
 	t_token	*new;
@@ -26,6 +29,9 @@ t_token	*new_token(char *filename, char **cmds, int type)
 	return (new);
 }
 
+/*
+ * returns the size of the linked list
+ */
 int	token_size(t_token *lst)
 {
 	int		size;
@@ -41,6 +47,9 @@ int	token_size(t_token *lst)
 	return (size);
 }
 
+/*
+ * returns last token of the list
+ */
 t_token	*last_token(t_token *lst)
 {
 	if (!lst)
@@ -50,6 +59,9 @@ t_token	*last_token(t_token *lst)
 	return (lst);
 }
 
+/*
+ * add the token at the end of the linked list
+ */
 int	add_back(t_token **lst, t_token *new)
 {
 	t_token	*tmp;
@@ -64,6 +76,9 @@ int	add_back(t_token **lst, t_token *new)
 	return (1);
 }
 
+/*
+ * increment token
+ */
 int	next_token(t_list **token)
 {
 	*token = (*token)->next;

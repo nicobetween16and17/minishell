@@ -12,6 +12,10 @@
 
 #include "minishl.h"
 
+/*
+ * returns 1 if the iterator point to a char of a string that is between
+ * quotes. the start and end quotes are consider as outside of the quote
+ */
 int	is_btwn_q(char *s, int i)
 {
 	int	sgl;
@@ -32,6 +36,9 @@ int	is_btwn_q(char *s, int i)
 	return (sgl || dbl);
 }
 
+/*
+ * create a substring without the useless quotes
+ */
 char	*sub(char *s, int start, int len)
 {
 	t_utils2	u;
@@ -55,6 +62,9 @@ char	*sub(char *s, int start, int len)
 	return (u.sub);
 }
 
+/*
+ * return 1 if the character is in the charset else 0
+ */
 int	is_charset(char c, char *charset)
 {
 	while (charset && *charset)

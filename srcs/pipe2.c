@@ -12,6 +12,10 @@
 
 #include "minishl.h"
 
+/*
+ * instantiate the pipes, the number of the commands, the iterator, the boolean
+ * that checks if the pipe failed, the current pipe and the number of pid
+ */
 void	init_pipe(t_pipe *pipex, t_token *cmds)
 {
 	pipex->pipe_failed = 0;
@@ -29,6 +33,9 @@ void	init_pipe(t_pipe *pipex, t_token *cmds)
 	pipex->n = 0;
 }
 
+/*
+ * execute the builtin depending of the type
+ */
 int	x_bi(char **cmd, int type, t_shell *sh)
 {
 	if (!type)
@@ -50,6 +57,9 @@ int	x_bi(char **cmd, int type, t_shell *sh)
 	return (type);
 }
 
+/*
+ * returns a number between 1 and 7 if it is a builtin else 0
+ */
 int	is_bi(char *cmd)
 {
 	if (!ft_strncmp(cmd, "echo", 5))
@@ -69,6 +79,9 @@ int	is_bi(char *cmd)
 	return (0);
 }
 
+/*
+ * returns the number of pipes
+ */
 int	nb_pipe(t_token *t)
 {
 	int	i;

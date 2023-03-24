@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * free all the element of the array from x to 0
+ */
 void	free_tab(char **tab, int i)
 {
 	while (i >= 0)
@@ -19,6 +22,9 @@ void	free_tab(char **tab, int i)
 	free(tab);
 }
 
+/*
+ * duplicates a string until iterator n
+ */
 char	*ft_strndup(char *s, int n)
 {
 	int		i;
@@ -35,6 +41,9 @@ char	*ft_strndup(char *s, int n)
 	return (new_s);
 }
 
+/*
+ * returns a string of the shell level incremented, if negative, it decrements
+ */
 char	*shell_plus_one(const char *s)
 {
 	char	*res;
@@ -61,6 +70,10 @@ char	*shell_plus_one(const char *s)
 	return (res);
 }
 
+/*
+ * does a copy of the parent shell environment variables and increment
+ * the shell level by one
+ */
 char	**env_init(const char **env)
 {
 	int		size;
@@ -86,6 +99,10 @@ char	**env_init(const char **env)
 	return (res);
 }
 
+/*
+ * displays all the environment variable of the current instance of the shell
+ * if there is parameters to env other than env, returns an error
+ */
 int	ft_env(char **params, t_shell *shell)
 {
 	int	i;
@@ -96,7 +113,7 @@ int	ft_env(char **params, t_shell *shell)
 	if (i > 1)
 	{
 		ft_putstr_fd("env: ", 1);
-		ft_putstr_fd(params[0], 1);
+		ft_putstr_fd(params[1], 1);
 		ft_putstr_fd(": Permission denied\n", 1);
 	}
 	else

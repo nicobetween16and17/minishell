@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * change the current directory to the one in parameters
+ */
 int	ft_cd(char **params, t_shell *shell)
 {
 	int		dir;
@@ -27,6 +30,9 @@ int	ft_cd(char **params, t_shell *shell)
 	return (0);
 }
 
+/*
+ * gives the current directory's absolute path
+ */
 int	ft_pwd(char **params, t_shell *shell)
 {
 	char	*buf;
@@ -40,6 +46,9 @@ int	ft_pwd(char **params, t_shell *shell)
 	return (0);
 }
 
+/*
+ * returns the number of parameters
+ */
 static int	nb_args(char **args)
 {
 	int		size;
@@ -50,6 +59,10 @@ static int	nb_args(char **args)
 	return (size);
 }
 
+/*
+ * displays the parameters and \n except if the second one start
+ * with '-' and only contains n
+ */
 int	ft_echo(char **args, t_shell *shell)
 {
 	int		i;
@@ -78,6 +91,10 @@ int	ft_echo(char **args, t_shell *shell)
 	return (0);
 }
 
+/*
+ * exit the program if 1 or less numeric parameters, else
+ * send an error msg
+ */
 int	ft_exit(char **params, t_shell *shell)
 {
 	shell->exit = 1;

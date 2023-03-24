@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * ctrl+C
+ */
 void	s_int(int value)
 {
 	(void)value;
@@ -29,6 +32,9 @@ void	s_int(int value)
 	g_signal.s_int = 1;
 }
 
+/*
+ * ctrl+'/'
+ */
 void	s_quit(int value)
 {
 	char	*nbr;
@@ -45,6 +51,9 @@ void	s_quit(int value)
 	nbr = NULL;
 }
 
+/*
+ * instantiate the global variable
+ */
 void	init_signal(void)
 {
 	g_signal.s_int = 0;

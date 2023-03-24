@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * add a line to an array of string
+ */
 char	**add_back_tab(char **tab, char *s)
 {
 	int		i;
@@ -29,6 +32,9 @@ char	**add_back_tab(char **tab, char *s)
 	return (new_tab);
 }
 
+/*
+ * set the type of redirection
+ */
 void	set_redir(char *f, t_list *tokens, t_token **new)
 {
 	if (!ft_strncmp((char *)tokens->content, "<", 2))
@@ -46,6 +52,9 @@ void	set_redir(char *f, t_list *tokens, t_token **new)
 		ft_printf("Error syntax in redirection\n");
 }
 
+/*
+ * display an error message
+ */
 int	error_open(char *file, t_shell *sh)
 {
 	sh->ret = 1;
@@ -56,6 +65,9 @@ int	error_open(char *file, t_shell *sh)
 	return (1);
 }
 
+/*
+ * redirect the entry or exit depending of the type of redirection
+ */
 void	redirect(t_shell *sh, char *f, int type)
 {
 	if (type == HDOC || type == INPUT)
@@ -78,6 +90,9 @@ void	redirect(t_shell *sh, char *f, int type)
 	dup2(sh->outfile, 1);
 }
 
+/*
+ * return 1 if the string is composed only of '<' and '>'
+ */
 int	only_redir(char *s)
 {
 	int	i;

@@ -12,6 +12,11 @@
 
 #include "minishl.h"
 
+/*
+ * Create a new array of size -1, select the iterator of the environment
+ * variable and copy everything except this one into the new array and
+ * returns it
+ */
 char	**erase_env_var(int i, char **envp)
 {
 	int		j;
@@ -35,6 +40,12 @@ char	**erase_env_var(int i, char **envp)
 	return (new_envp);
 }
 
+/**
+ * check if the argument is incorrect, return the already existing
+ * environment variables, if it is correct, if it exists already
+ * change the value by the new one, if it is brand new, return a
+ * new array with size + 1 and a new line for the variable
+ */
 char	**change_var(char *s, char **envp)
 {
 	int	i;
@@ -52,6 +63,9 @@ char	**change_var(char *s, char **envp)
 	return (envp);
 }
 
+/*
+ * returns the iterator of the environment variable. -1 if it does not exist
+ */
 int	check_exist(char *p, char **s)
 {
 	int	i;
@@ -65,6 +79,10 @@ int	check_exist(char *p, char **s)
 	return (-1);
 }
 
+/*
+ * check if the parameter is a valid and existing name of environment
+ * and erase the line if it is
+ */
 int	ft_unset(char **params, t_shell *shell)
 {
 	int	i;
@@ -82,6 +100,10 @@ int	ft_unset(char **params, t_shell *shell)
 	return (0);
 }
 
+/*
+ * if no parameters, shows all the environment variables
+ * if parameters, for each parameters, call change_var
+ */
 int	ft_export(char **params, t_shell *shell)
 {
 	int	i;

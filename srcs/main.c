@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * free the linked list allocated memory
+ */
 void	free_token(t_token *current)
 {
 	if (current->cmds == CMD)
@@ -22,6 +25,9 @@ void	free_token(t_token *current)
 	current->filename = NULL;
 }
 
+/*
+ * add a space at the end of the string
+ */
 char	*line_plus_space(t_shell *shell)
 {
 	char	*line;
@@ -38,6 +44,12 @@ char	*line_plus_space(t_shell *shell)
 	return (shell->line);
 }
 
+/*
+ * intercept the signals, displays the prompt with a crux or a 'v' depending
+ * of the succes of the last command line. quit if the user uses ctrl+D
+ * add the line in the history, replace the dollar signs, tokenize the line
+ * and execute them. free the allocated line at the end.
+ */
 void	checkline(t_shell *shell)
 {
 	char	*line;
@@ -67,6 +79,9 @@ void	checkline(t_shell *shell)
 	}
 }
 
+/*
+ * instantiate the shell and the environment variables
+ */
 void	init_shell(t_shell *shell, char **env)
 {
 	shell->tokens = NULL;

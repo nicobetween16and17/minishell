@@ -12,6 +12,10 @@
 
 #include "minishl.h"
 
+/*
+ * replace all the characters between start and end of str by the
+ * replace string
+ */
 char	*replace(char *str, char *start, char *end, char *replace)
 {
 	char	*res;
@@ -38,6 +42,11 @@ char	*replace(char *str, char *start, char *end, char *replace)
 	return (res);
 }
 
+/*
+ * This function return 1 if the current iterator of the string point isn't
+ * between a single quote an 0 if not, if open = 1 and 'i' is the iterator
+ * of the last character of the string, then it returns 1 if the quote is open
+ */
 int	is_expandable(char *s, int i, int open)
 {
 	int	sgl;
@@ -58,6 +67,12 @@ int	is_expandable(char *s, int i, int open)
 	return (!sgl);
 }
 
+/*
+ * This function search for dollar signs, if it finds one wich is not
+ * between single quotes and is not placed before one of the exceptions,
+ * then it create a substring of the dollar sign word and one of the
+ * corresponding environment variable, then it replace one with the other.
+ */
 void	replace_words(t_shell *shell, int i, int j)
 {
 	char	*tmp2;

@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * cf is_charset
+ */
 int	contain(char c, char *s)
 {
 	int	i;
@@ -34,6 +37,9 @@ int	contain(char c, char *s)
 	return (0);
 }
 
+/*
+ * returns the of the researched environment variable
+ */
 int	find(char *env_line, char *to_find)
 {
 	int	i;
@@ -44,15 +50,21 @@ int	find(char *env_line, char *to_find)
 	return (env_line[i]);
 }
 
+/*
+ * returns an empty allocated string
+ */
 char	*empty_freeable_string(void)
 {
 	char	*str;
 
-	str = malloc(1);
+	str = xmalloc(1);
 	str[0] = 0;
 	return (str);
 }
 
+/*
+ * returns the iterator of the argument, -1 if it does not exist
+ */
 int	check_arg(char *s)
 {
 	int	i;
@@ -67,6 +79,10 @@ int	check_arg(char *s)
 	return (i);
 }
 
+/*
+ * returns a copy of the string left side (format being NAME=VALUE), NULL if
+ * not valid
+ */
 char	*name_env_var(char *s)
 {
 	int		i;

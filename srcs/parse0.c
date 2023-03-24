@@ -12,6 +12,10 @@
 
 #include "minishl.h"
 
+/*
+ * cut the part of the command line and erase the quotes except the one
+ * that are situated between opposed quotes
+ */
 int	cut_until(char *s, t_utils *utils, char *stop)
 {
 	int	start;
@@ -40,12 +44,18 @@ int	cut_until(char *s, t_utils *utils, char *stop)
 	return (1);
 }
 
+/*
+ * simple flag to say when you found a keyword
+ */
 int	set_last(t_utils *utils, int i)
 {
 	utils->last = i;
 	return (1);
 }
 
+/*
+ * create an easy to une cmd with the arguments
+ */
 t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
 {
 	char	**cmds;
@@ -59,6 +69,9 @@ t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
 	return (t);
 }
 
+/*
+ * depending of the features of the token, create the complete token with a type
+ */
 void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 {
 	while (t)
@@ -82,6 +95,10 @@ void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 	}
 }
 
+/*
+ * parse through the line and cut when encounter some key words, remove the
+ * quotes too. then create type for the tokens.
+ */
 void	parse(char *s, t_shell *sh)
 {
 	t_utils	utils;

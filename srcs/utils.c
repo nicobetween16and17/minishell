@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * protected malloc
+ */
 void	*xmalloc(size_t size)
 {
 	void	*malloced_memory;
@@ -22,6 +25,9 @@ void	*xmalloc(size_t size)
 	return (malloced_memory);
 }
 
+/*
+ * allocate memory for an array of strings from a linked list
+ */
 void	*cmds_malloc(t_list *new)
 {
 	int		i;
@@ -32,6 +38,9 @@ void	*cmds_malloc(t_list *new)
 	return (xmalloc(sizeof(char *) * ++i));
 }
 
+/*
+ * returns the number of commands in the linked list
+ */
 int	nb_cmd(t_token *lst)
 {
 	int	i;
@@ -46,6 +55,9 @@ int	nb_cmd(t_token *lst)
 	return (i);
 }
 
+/*
+ * free a nul terminated array of strings
+ */
 void	free_completed_tab(char **tab)
 {
 	int	i;
@@ -56,6 +68,9 @@ void	free_completed_tab(char **tab)
 	free(tab[i]);
 }
 
+/*
+ * returns 1 if the string only contain numerical characters else 0
+ */
 int	ft_strisnum(char *s)
 {
 	int	i;

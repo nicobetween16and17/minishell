@@ -23,28 +23,23 @@ char	*print_name_variable(char *s)
 	return (s + i + 1);
 }
 
+/*
+ * switch lines
+ */
 char	**switch_env_var(char **envp, int i, int j)
 {
 	char	*tmp;
 
 	tmp = envp[i];
-	envp[i] = malloc(sizeof(char) * (ft_strlen(envp[j] + 1)));
-	if (!envp[i])
-	{
-		printf("malloc probleme");
-		exit(0);
-	}
 	envp[i] = envp[j];
-	envp[j] = malloc(sizeof(char) * (ft_strlen(tmp) + 1));
-	if (!envp[j])
-	{
-		printf("malloc error");
-		exit(0);
-	}
 	envp[j] = tmp;
 	return (envp);
 }
 
+/*
+ * displays the environment variable in the alphabetical order and displays
+ * "declare -x" in front of each
+ */
 void	env_in_alphabetic_order(char **envp)
 {
 	int		i;
@@ -74,6 +69,10 @@ void	env_in_alphabetic_order(char **envp)
 	}
 }
 
+/*
+ * returns the value of an environment variable or the status of the last
+ * command line if s = "$?"
+ */
 char	*get_env(char *s, char **env)
 {
 	int		i;
@@ -98,6 +97,9 @@ char	*get_env(char *s, char **env)
 	return (env[i] + j);
 }
 
+/*
+ * returns the line of the environment variable (expected format NAME=)
+ */
 char	*get_env_line(char **env, char *env_line)
 {
 	int	i;

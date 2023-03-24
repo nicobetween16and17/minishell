@@ -12,6 +12,9 @@
 
 #include "minishl.h"
 
+/*
+ * search for a valid path for the command and returns it
+ */
 char	*get_path(char *cmd, char *path)
 {
 	int		i;
@@ -38,6 +41,11 @@ char	*get_path(char *cmd, char *path)
 	return (res);
 }
 
+/*
+ * create a pipe between the exit of the last pipe and the entry of the new pipe
+ * then if it is a builtin, executes it and exits, else execute it with 'execve'
+ * close each ends of the pipe before and after the execution
+ */
 void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 {
 	if (pipex->pid[pipex->nb_pid] == 0)
@@ -63,6 +71,9 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 		exit(1);
 }
 
+/*
+ * get the path and fork, stop if the fork failed, the execute
+ */
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
 	pipex->crt = cmds->cmds;
@@ -76,6 +87,13 @@ void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 	pipe_exec2(shell, pipex);
 }
 
+/*
+ * if the token's type is REDIR, redirect the input/output
+ * if the token's type is CMD, keep a save of the token
+ * if the token's type is PIPE, execute the last command
+ * if there is no pipe and the command is a builtin, execute the builtin
+ * in any other cases, goes for the fork in pipe_exec
+ */
 void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
 {
 	while (!pipex->pipe_failed && token)
@@ -103,6 +121,9 @@ void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
 	}
 }
 
+/*
+ * execute the token
+ */
 void	exec_cmds(t_shell *shell, t_token *token)
 {
 	t_pipe	pipex;
