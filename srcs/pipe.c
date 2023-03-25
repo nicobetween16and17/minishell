@@ -53,13 +53,16 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 		if (pipex->n < pipex->len - 1 && \
 		dup2(pipex->fd[pipex->n][1], shell->outfile) < 0)
 			exit(1);
-		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][0]))
+		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][1]))
 			exit(1);
 		if (pipex->n && dup2(pipex->fd[pipex->n - 1][0], shell->infile) < 0)
 			exit(1);
-		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][1]))
-			exit(1);
 		if (pipex->n && close(pipex->fd[pipex->n - 1][0]))
+			exit(1);
+		if (pipex->n < pipex->len - 1 && close(pipex->fd[pipex->n][0]))
+			exit(1);
+		if (pipex->n && pipex->n < pipex->len - 1 && \
+		close(pipex->fd[pipex->n - 1][1]))
 			exit(1);
 		if (!x_bi(pipex->crt, is_bi(pipex->crt[0]), shell))
 			execve(pipex->cmd, pipex->crt, shell->env);
