@@ -32,7 +32,8 @@
 # define APPEND 3
 # define INPUT 4
 # define PIPE 5
-
+# define RIGHT 6
+# define LEFT 7
 typedef struct s_utils
 {
 	int		i;
@@ -74,8 +75,16 @@ typedef struct s_pipe
 	t_token	*current;
 }	t_pipe;
 
+typedef struct s_env
+{
+	char			*name;
+	char			*value;
+	struct s_env	*next;
+}t_env;
+
 typedef struct s_shell
 {
+	char		**new_env;
 	char		*line;
 	char		**env;
 	int			infile;
@@ -86,13 +95,10 @@ typedef struct s_shell
 	int			exit;
 	int			ret;
 	int			no_exec;
-	int			pipe_in;
-	int			pipe_out;
 	pid_t		pid;
 	char		folie[10];
-	int			parent;
 	int			last;
-	int			charge;
+	t_env		*env_lst;
 	t_token		*tokens;
 
 }	t_shell;
@@ -126,7 +132,7 @@ int		ft_env(char **params, t_shell *shell);
 int		ft_pwd(char **params, t_shell *shell);
 int		ft_echo(char **params, t_shell *shell);
 int		ft_cd(char **params, t_shell *shell);
-void	env_in_alphabetic_order(char **envp);
+void	env_in_alphabetic_order(t_env *env);
 int		here_doc(char *delimiter);
 int		is_bi(char *cmd);
 char	**env_init(const char **env);
@@ -163,7 +169,6 @@ void	init_signal(void);
 void	s_quit(int value);
 void	s_int(int value);
 void	set_redir(char *f, t_list *tokens, t_token **new);
-char	**add_back_tab(char **tab, char *s);
 char	*name_env_var(char *s);
 int		check_arg(char *s);
 void	init_pipe(t_pipe *pipex, t_token *cmds);
@@ -172,4 +177,17 @@ int		is_bi(char *cmd);
 int		nb_pipe(t_token *t);
 int		only_redir(char *s);
 char	*get_env_line(char **env, char *env_line);
+t_env	*new_env(char *name, char *value);
+int		env_size(t_env *lst);
+t_env	*last_env(t_env *lst);
+int		add_env(t_env **lst, t_env *new);
+char	*get_env_value(t_env *env_lst, char *s);
+int		remove_env(t_shell *sh, char *s);
+int		change_env(t_env *env, char *s);
+int		get_env_size(t_env *env);
+char	**get_env_tab(t_env *env);
+void	free_env_lst(t_env *env);
+t_env	*init_lst(char **tab);
+char	*get_side(int side, char *s);
+
 #endif

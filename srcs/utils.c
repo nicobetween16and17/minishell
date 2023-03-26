@@ -65,7 +65,7 @@ void	free_completed_tab(char **tab)
 	i = -1;
 	while (tab[++i])
 		free(tab[i]);
-	free(tab[i]);
+	free(tab);
 }
 
 /*

@@ -53,7 +53,7 @@ char	*shell_plus_one(const char *s)
 	int		nb;
 
 	i = 0;
-	while (s && s[i] && !ft_isdigit(s[i]))
+	while (s && s[i] && (!ft_isdigit(s[i]) || s[i] == '-'))
 		i++;
 	right_side = ft_strdup(s + i);
 	if (!right_side)
@@ -105,10 +105,12 @@ char	**env_init(const char **env)
  */
 int	ft_env(char **params, t_shell *shell)
 {
-	int	i;
+	int		i;
+	t_env	*env;
 
+	env = shell->env_lst;
 	i = 0;
-	while (params && params[i])
+	while (params[i])
 		i++;
 	if (i > 1)
 	{
@@ -118,11 +120,10 @@ int	ft_env(char **params, t_shell *shell)
 	}
 	else
 	{
-		i = -1;
-		while (shell->env[++i])
+		while (env)
 		{
-			ft_putstr_fd(shell->env[i], 1);
-			ft_putstr_fd("\n", 1);
+			ft_printf("%s%s\n", env->name, env->value);
+			env = env->next;
 		}
 	}
 	return (0);

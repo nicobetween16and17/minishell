@@ -13,16 +13,26 @@
 #include "minishl.h"
 
 /*
- * free the linked list allocated memory
+ * free the linked list allocated memory and the command line
  */
-void	free_token(t_token *current)
+void	free_all(t_shell *sh)
 {
-	if (current->cmds == CMD)
-		free_completed_tab(current->cmds);
-	else
-		free(current->filename);
-	current->cmds = NULL;
-	current->filename = NULL;
+	t_token *current;
+
+	current = xmalloc(1);
+	while (sh->tokens)
+	{
+		free(current);
+		current = sh->tokens;
+		if (current->type == CMD)
+			free_completed_tab(current->cmds);
+		else
+			free(current->filename);
+		current->cmds = NULL;
+		current->filename = NULL;
+		sh->tokens = sh->tokens->next;
+	}
+	free(sh->line);
 }
 
 /*
@@ -62,7 +72,7 @@ void	checkline(t_shell *shell)
 		ft_putstr_fd("✔️ ", 2);
 	line = readline("\033[0;32mminishell> \033[0m");
 	if (!line)
-		exit(shell->ret);
+		shell->exit = 1;
 	else
 	{
 		if (g_signal.s_int == 1)
@@ -70,12 +80,14 @@ void	checkline(t_shell *shell)
 		shell->line = line;
 		if (is_expandable(line, ft_strlen(line), 1))
 			return ;
+		free_completed_tab(shell->env);
+		shell->env = get_env_tab(shell->env_lst);
 		add_history(shell->line);
 		line_plus_space(shell);
 		replace_words(shell, -1, 0);
 		parse(shell->line, shell);
 		exec_cmds(shell, shell->tokens->next);
-		free(shell->line);
+		free_all(shell);
 	}
 }
 
@@ -91,6 +103,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->ret = 0;
 	shell->no_exec = 0;
 	shell->env = env_init((const char **)env);
+	shell->env_lst = init_lst(shell->env);
 	init_signal();
 }
 
@@ -111,9 +124,10 @@ int	main(int ac, char **av, char **env)
 		reset_std(&shell);
 		reset_fds(&shell);
 		waitpid(-1, &status, 0);
-		status = WEXITSTATUS(status);
-		if (shell.ret)
-			shell.ret = status;
 	}
-	return (0);
+	free_completed_tab(shell.env);
+	free_env_lst(shell.env_lst);
+	rl_clear_history();
+	system("leaks a.out");
+	return (shell.ret);
 }

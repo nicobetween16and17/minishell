@@ -13,26 +13,6 @@
 #include "minishl.h"
 
 /*
- * add a line to an array of string
- */
-char	**add_back_tab(char **tab, char *s)
-{
-	int		i;
-	char	**new_tab;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	new_tab = malloc((i + 2) * sizeof(char *));
-	i = -1;
-	while (tab[++i])
-		new_tab[i] = tab[i];
-	new_tab[i] = ft_strdup(s);
-	new_tab[i + 1] = NULL;
-	return (new_tab);
-}
-
-/*
  * set the type of redirection
  */
 void	set_redir(char *f, t_list *tokens, t_token **new)

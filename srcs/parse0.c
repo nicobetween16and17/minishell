@@ -121,4 +121,5 @@ void	parse(char *s, t_shell *sh)
 	utils.tokens = utils.tokens->next;
 	sh->tokens = new_token(NULL, NULL, -1);
 	setup_cmd(utils.tokens, &sh->tokens, utils.tmp, 0);
+	ft_lstclear(&utils.tokens, free);
 }

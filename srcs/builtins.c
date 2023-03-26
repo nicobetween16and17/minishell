@@ -20,14 +20,14 @@ int	ft_cd(char **params, t_shell *shell)
 	int		dir;
 	char	*path;
 
-	if (!params || !params[0] || !params[1])
-		return (1);
+	if (!params[1])
+		return (0);
 	path = params[1];
 	(void)shell;
 	dir = chdir(path);
 	if (dir)
-		ft_printf("cd: string not in pwd: %s\n", path);
-	return (0);
+		ft_printf("cd: %s: no such file or directory\n", path);
+	return (dir);
 }
 
 /*
@@ -40,10 +40,13 @@ int	ft_pwd(char **params, t_shell *shell)
 	(void)params;
 	(void)shell;
 	buf = getcwd(NULL, 0);
-	ft_putstr_fd(buf, 1);
+	if (params[1])
+		ft_printf("pwd: too many arguments");
+	else
+		ft_putstr_fd(buf, 1);
 	write(1, "\n", 1);
 	free(buf);
-	return (0);
+	return (params[1] != 0);
 }
 
 /*
@@ -120,5 +123,5 @@ int	ft_exit(char **params, t_shell *shell)
 		shell->ret = ft_atoi(params[1]);
 	else
 		shell->ret = 0;
-	return (0);
+	return (shell->ret);
 }

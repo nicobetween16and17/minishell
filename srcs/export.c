@@ -12,71 +12,58 @@
 
 #include "minishl.h"
 
-/*
- * Create a new array of size -1, select the iterator of the environment
- * variable and copy everything except this one into the new array and
- * returns it
- */
-char	**erase_env_var(int i, char **envp)
+char	*get_side(int side, char *s)
 {
+	int		i;
+	char	*res;
 	int		j;
-	int		k;
-	char	**new_envp;
 
-	k = 0;
 	j = 0;
-	while (envp[j])
-		j++;
-	new_envp = xmalloc(--j * sizeof(char *));
-	j = -1;
-	while (envp[++j])
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	if (side == RIGHT)
 	{
-		if (j != i)
-			new_envp[k++] = envp[j];
+		res = xmalloc(sizeof(char) * (ft_strlen(s) - i + 1));
+		while (s[i] && s[++i])
+			res[j++] = s[i];
+		res[j] = 0;
+		return (res);
 	}
-	free(envp[j]);
-	free(envp);
-	new_envp[k] = NULL;
-	return (new_envp);
+	res = xmalloc(sizeof(char) * ++i);
+	i = 0;
+	res[i] = s[i];
+	while (s[++i] && s[i] && s[i - 1] != '=')
+		res[i] = s[i];
+	res[i] = 0;
+	return (res);
 }
 
-/**
- * check if the argument is incorrect, return the already existing
- * environment variables, if it is correct, if it exists already
- * change the value by the new one, if it is brand new, return a
- * new array with size + 1 and a new line for the variable
- */
-char	**change_var(char *s, char **envp)
+int	change_env(t_env *env, char *s)
 {
-	int	i;
-
-	i = check_arg(s);
-	if (i < 0)
-		return (envp);
-	i = -1;
-	while (envp[++i])
+	while (env)
 	{
-		if (!ft_strncmp(name_env_var(s), name_env_var(envp[i]), ft_strlen(s)))
-			envp = erase_env_var(i, envp);
+		if (!ft_strncmp(s, env->name, ft_strlen(env->name)))
+		{
+			free(env->value);
+			env->value = get_side(RIGHT, s);
+			return (1);
+		}
+		env = env->next;
 	}
-	envp = add_back_tab(envp, s);
-	return (envp);
+	return (0);
 }
 
-/*
- * returns the iterator of the environment variable. -1 if it does not exist
- */
-int	check_exist(char *p, char **s)
+t_env	*init_lst(char **tab)
 {
-	int	i;
+	int		i;
+	t_env	*env;
 
+	env = new_env(NULL, NULL);
 	i = -1;
-	while (s[++i])
-	{
-		if (!ft_strncmp(p, s[i], ft_strlen(p) - 1) && s[i][ft_strlen(p)] == '=')
-			return (i);
-	}
-	return (-1);
+	while (tab[++i])
+		add_env(&env, new_env(get_side(LEFT, tab[i]), get_side(RIGHT, tab[i])));
+	return (env->next);
 }
 
 /*
@@ -86,15 +73,12 @@ int	check_exist(char *p, char **s)
 int	ft_unset(char **params, t_shell *shell)
 {
 	int	i;
-	int	check;
 
 	i = 0;
 	while (params[++i])
 	{
-		check = check_exist(params[1], shell->env);
-		if (check != -1)
-			shell->env = erase_env_var(check, shell->env);
-		else if (ft_printf("invalid identifier\n"))
+		if (remove_env(shell, params[i]) && \
+		ft_printf("invalid identifier\n"))
 			return (1);
 	}
 	return (0);
@@ -108,13 +92,17 @@ int	ft_export(char **params, t_shell *shell)
 {
 	int	i;
 
-	i = -1;
 	if (!params[1])
 	{
-		env_in_alphabetic_order(shell->env);
+		env_in_alphabetic_order(shell->env_lst);
 		return (0);
 	}
+	i = 0;
 	while (params[++i])
-		shell->env = change_var(params[i], shell->env);
+	{
+		if (!change_env(shell->env_lst, params[i]))
+			add_env(&shell->env_lst, \
+			new_env(get_side(LEFT, params[i]), get_side(RIGHT, params[i])));
+	}
 	return (0);
 }

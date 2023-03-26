@@ -23,49 +23,38 @@ char	*print_name_variable(char *s)
 	return (s + i + 1);
 }
 
-/*
- * switch lines
- */
-char	**switch_env_var(char **envp, int i, int j)
+t_env	*get_next_smallest(t_env *env, char *last)
 {
-	char	*tmp;
+	t_env	*save;
 
-	tmp = envp[i];
-	envp[i] = envp[j];
-	envp[j] = tmp;
-	return (envp);
+	save = NULL;
+	while (env)
+	{
+		if (ft_strncmp(env->name, last, ft_strlen(env->name)) > 0 && \
+		(!save || ft_strncmp(env->name, save->name, ft_strlen(env->name)) < 0))
+		save = env;
+		env = env->next;
+	}
+	return (save);
 }
-
 /*
  * displays the environment variable in the alphabetical order and displays
  * "declare -x" in front of each
  */
-void	env_in_alphabetic_order(char **envp)
+void	env_in_alphabetic_order(t_env *env)
 {
-	int		i;
-	int		j;
-	char	*s;
+	char	*last;
+	t_env	*current;
 
-	i = -1;
-	while (envp[++i])
+	last = "\0";
+	while (1)
 	{
-		j = i;
-		while (envp[j + 1])
-		{
-			if (ft_strncmp(envp[i], envp[j], ft_strlen(envp[i])) > 0)
-				envp = switch_env_var(envp, i, j);
-			j++;
-		}
-	}
-	i = 0;
-	while (envp[i])
-	{
-		ft_putstr_fd("declare -x ", 1);
-		s = print_name_variable(envp[i]);
-		ft_putstr_fd("=\"", 1);
-		ft_putstr_fd(s, 1);
-		ft_putstr_fd("\"\n", 1);
-		i++;
+		current = get_next_smallest(env, last);
+		if (current)
+			last = current->name;
+		else
+			break ;
+		ft_printf("declare -x %s%s\n", current->name, current->value);
 	}
 }
 

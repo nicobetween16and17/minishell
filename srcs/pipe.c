@@ -144,4 +144,5 @@ void	exec_cmds(t_shell *shell, t_token *token)
 	pipex.i = 0;
 	while (pipex.i < pipex.nb_pid)
 		waitpid(pipex.pid[pipex.i++], &pipex.status, 0);
+	g_signal.status = shell->ret;
 }
