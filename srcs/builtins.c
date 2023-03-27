@@ -18,15 +18,22 @@
 int	ft_cd(char **params, t_shell *shell)
 {
 	int		dir;
-	char	*path;
 
 	if (!params[1])
 		return (0);
-	path = params[1];
 	(void)shell;
-	dir = chdir(path);
+	dir = chdir(params[1]);
 	if (dir)
 	{
+		dir = open(params[1], O_RDONLY);
+		if (dir > 0)
+		{
+			ft_putstr_fd("cd: not a directory: ", 2);
+			ft_putstr_fd(params[1], 2);
+			ft_putstr_fd("\n", 2);
+			return (close(dir) + 1);
+
+		}
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(params[1], 2);
 		ft_putstr_fd(": no such file or directory\n",2);
