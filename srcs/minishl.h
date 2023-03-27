@@ -34,6 +34,7 @@
 # define PIPE 5
 # define RIGHT 6
 # define LEFT 7
+
 typedef struct s_utils
 {
 	int		i;
@@ -84,18 +85,15 @@ typedef struct s_env
 
 typedef struct s_shell
 {
-	char		**new_env;
 	char		*line;
+	char		*tmp;
 	char		**env;
 	int			infile;
-	char		*heredoc;
 	int			outfile;
 	int			in;
 	int			out;
 	int			exit;
 	int			ret;
-	int			no_exec;
-	pid_t		pid;
 	char		folie[10];
 	int			last;
 	t_env		*env_lst;

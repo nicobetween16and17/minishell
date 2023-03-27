@@ -80,10 +80,15 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
 	pipex->crt = cmds->cmds;
-	if (access(cmds->cmds[0], X_OK))
+	if (access(cmds->cmds[0], X_OK) && printf("here\n"))
 		pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
 	else
 		pipex->cmd = ft_strdup(pipex->crt[0]);
+	if (!pipex->cmd)
+	{
+		pipex->pipe_failed = 1;
+		return ;
+	}
 	pipex->pid[pipex->nb_pid] = fork();
 	if (pipex->pid[pipex->nb_pid] == -1 && pipex->pipe_failed++)
 		return ;
@@ -115,7 +120,8 @@ void	loop_exec(t_pipe *pipex, t_token *token, t_shell *shell, int n_pipe)
 				pipe_exec(shell, pipex->current, pipex);
 				pipex->n++;
 				pipex->nb_pid++;
-				free(pipex->cmd);
+				if (pipex->cmd)
+					free(pipex->cmd);
 			}
 			reset_fds(shell);
 			reset_std(shell);

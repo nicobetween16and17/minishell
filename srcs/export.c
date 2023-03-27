@@ -77,9 +77,11 @@ int	ft_unset(char **params, t_shell *shell)
 	i = 0;
 	while (params[++i])
 	{
-		if (remove_env(shell, params[i]) && \
-		ft_printf("invalid identifier\n"))
+		if (remove_env(shell, params[i]))
+		{
+			ft_putstr_fd("invalid identifier\n", 2);
 			return (1);
+		}
 	}
 	return (0);
 }

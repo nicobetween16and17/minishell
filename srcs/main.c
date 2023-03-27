@@ -62,23 +62,20 @@ char	*line_plus_space(t_shell *shell)
  */
 void	checkline(t_shell *shell)
 {
-	char	*line;
-
 	signal(SIGINT, &s_int);
 	signal(SIGQUIT, &s_quit);
 	if (shell->ret)
 		ft_putstr_fd("❌ ", 2);
 	else
 		ft_putstr_fd("✔️ ", 2);
-	line = readline("\033[0;32mminishell> \033[0m");
-	if (!line)
+	shell->line = readline("\033[0;32mminishell> \033[0m");
+	if (!shell->line)
 		shell->exit = 1;
 	else
 	{
 		if (g_signal.s_int == 1)
 			shell->ret = g_signal.status;
-		shell->line = line;
-		if (is_expandable(line, ft_strlen(line), 1))
+		if (is_expandable(shell->line, ft_strlen(shell->line), 1))
 			return ;
 		free_completed_tab(shell->env);
 		shell->env = get_env_tab(shell->env_lst);
@@ -101,7 +98,6 @@ void	init_shell(t_shell *shell, char **env)
 	shell->out = dup(1);
 	shell->exit = 0;
 	shell->ret = 0;
-	shell->no_exec = 0;
 	shell->env = env_init((const char **)env);
 	shell->env_lst = init_lst(shell->env);
 	init_signal();
@@ -127,7 +123,8 @@ int	main(int ac, char **av, char **env)
 	}
 	free_completed_tab(shell.env);
 	free_env_lst(shell.env_lst);
-	rl_clear_history();
-	system("leaks a.out");
+	//free(shell.tokens);
+	//rl_clear_history();
+	//system("leaks a.out");
 	return (shell.ret);
 }

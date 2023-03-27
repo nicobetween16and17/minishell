@@ -21,7 +21,7 @@ void	*xmalloc(size_t size)
 
 	malloced_memory = malloc(size);
 	if (!malloced_memory)
-		exit(EXIT_FAILURE);
+		exit(1);
 	return (malloced_memory);
 }
 

@@ -41,22 +41,26 @@ int	remove_env(t_shell *sh, char *s)
 	t_env	*head;
 	t_env	*previous;
 	t_env	*next;
-	char	*tmp;
 
-	tmp = ft_strjoin(s, "=");
+	sh->tmp = ft_strjoin(s, "=");
 	head = sh->env_lst;
-	removed = get_env_side(sh->env_lst, tmp, 0);
-	previous = get_env_side(sh->env_lst, tmp, LEFT);
-	next = get_env_side(sh->env_lst, tmp, RIGHT);
-	free(tmp);
+	removed = get_env_side(sh->env_lst, sh->tmp, 0);
+	previous = get_env_side(sh->env_lst, sh->tmp, LEFT);
+	next = get_env_side(sh->env_lst, sh->tmp, RIGHT);
+	free(sh->tmp);
 	if (!removed)
 		return (1);
 	free(removed->name);
 	free(removed->value);
 	free(removed);
-	sh->env_lst = previous;
-	sh->env_lst->next = next;
-	sh->env_lst = head;
+	if (previous->next == NULL)
+		sh->env_lst = next;
+	else
+	{
+		sh->env_lst = previous;
+		sh->env_lst->next = next;
+		sh->env_lst = head;
+	}
 	return (0);
 }
 

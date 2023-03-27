@@ -38,7 +38,6 @@ void	set_redir(char *f, t_list *tokens, t_token **new)
 int	error_open(char *file, t_shell *sh)
 {
 	sh->ret = 1;
-	sh->no_exec = 1;
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putendl_fd(": No such file or directory", 2);

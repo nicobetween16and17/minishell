@@ -87,6 +87,7 @@ void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 			t = t->next;
 		else if (t && !ft_strncmp((char *)t->content, "|", 2))
 		{
+			free((char *)t->content);
 			add_back(new, new_token(NULL, NULL, PIPE));
 			t = t->next;
 		}
@@ -121,5 +122,5 @@ void	parse(char *s, t_shell *sh)
 	utils.tokens = utils.tokens->next;
 	sh->tokens = new_token(NULL, NULL, -1);
 	setup_cmd(utils.tokens, &sh->tokens, utils.tmp, 0);
-	ft_lstclear(&utils.tokens, free);
+	//ft_lstclear(&utils.tokens, free);
 }
