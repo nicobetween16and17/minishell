@@ -173,8 +173,6 @@ void	replace_words(t_shell *shell, int i, int j);
 int		error_open(char *file, t_shell *sh);
 void	redirect(t_shell *sh, char *f, int type);
 void	init_signal(void);
-void	s_quit(int value);
-void	s_int(int value);
 void	set_redir(char *f, t_list *tokens, t_token **new);
 char	*name_env_var(char *s);
 int		check_arg(char *s);
@@ -197,4 +195,5 @@ void	free_env_lst(t_env *env);
 t_env	*init_lst(char **tab);
 char	*get_side(int side, char *s);
 int		check_forbidden(char *s, t_shell *sh);
+void	set_signal(void);
 #endif

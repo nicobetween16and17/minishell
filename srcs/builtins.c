@@ -54,13 +54,10 @@ int	ft_pwd(char **params, t_shell *shell)
 	(void)params;
 	(void)shell;
 	buf = getcwd(NULL, 0);
-	if (params[1])
-		ft_printf("pwd: too many arguments");
-	else
-		ft_putstr_fd(buf, 1);
+	ft_putstr_fd(buf, 1);
 	write(1, "\n", 1);
 	free(buf);
-	return (params[1] != 0);
+	return (0);
 }
 
 /*
@@ -115,23 +112,19 @@ int	ft_echo(char **args, t_shell *shell)
 int	ft_exit(char **params, t_shell *shell)
 {
 	shell->exit = 1;
-	ft_bzero(shell->folie, 10);
-	ft_putstr_fd("exit ", 2);
-	ft_strlcpy(shell->folie, "✔️ ", 8);
-	if (params[1])
-		ft_strlcpy(shell->folie, "❌ ", 8);
-	ft_putendl_fd(shell->folie, 2);
-	if (params[1] && params[2])
-	{
-		shell->ret = 1;
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-	}
-	else if (params[1] && ft_strisnum(params[1]) == 0)
+	if (params[1] && ft_strisnum(params[1]) == 0)
 	{
 		shell->ret = 255;
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(params[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+	}
+	else if (params[1] && params[2])
+	{
+		ft_putstr_fd("exit\n", 2);
+		shell->ret = 1;
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		shell->exit = 0;
 	}
 	else if (params[1])
 		shell->ret = ft_atoi(params[1]);

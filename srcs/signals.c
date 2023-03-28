@@ -13,45 +13,6 @@
 #include "minishl.h"
 
 /*
- * ctrl+C
- */
-void	s_int(int value)
-{
-	(void)value;
-	if (g_signal.pid == 0)
-	{
-		ft_putstr_fd("\n", 2);
-		ft_putstr_fd("\033[0;32m❌ minishell > \033[0m", 2);
-		g_signal.status = 1;
-	}
-	else
-	{
-		ft_putstr_fd("\n", 2);
-		g_signal.status = 130;
-	}
-	g_signal.s_int = 1;
-}
-
-/*
- * ctrl+'/'
- */
-void	s_quit(int value)
-{
-	char	*nbr;
-
-	nbr = ft_itoa(value);
-	if (g_signal.pid != 0)
-	{
-		ft_putstr_fd("Quit: ", 2);
-		ft_putendl_fd(nbr, 2);
-		g_signal.status = 131;
-		g_signal.s_quit = 1;
-	}
-	free(nbr);
-	nbr = NULL;
-}
-
-/*
  * instantiate the global variable
  */
 void	init_signal(void)
@@ -60,4 +21,55 @@ void	init_signal(void)
 	g_signal.s_quit = 0;
 	g_signal.pid = 0;
 	g_signal.status = 0;
+}
+
+void	funtion_sigint(pid_t pid)
+{
+	if (pid == -1)
+	{
+		ft_putstr_fd("  \b\b", 1);
+		ft_putstr_fd("\n❌ ", 2);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else
+		ft_putstr_fd("\n", 1);
+}
+
+void	funtion_sigquit(pid_t pid)
+{
+	char	*nbr;
+
+	nbr = ft_itoa(g_signal.status);
+	if (!nbr)
+		return ;
+	if (pid == -1)
+	{
+		ft_putstr_fd("✔️", 2);
+		rl_on_new_line();
+		rl_redisplay();
+		ft_putstr_fd("  \b\b", 1);
+	}
+	else
+	{
+		ft_putstr_fd("Quit: ", 2);
+		ft_putendl_fd(nbr, 2);
+	}
+	free(nbr);
+}
+
+void	handle_signal(int signo)
+{
+	g_signal.pid = waitpid(-1, &g_signal.status, WNOHANG);
+	if (signo == SIGINT)
+		funtion_sigint(g_signal.pid);
+	else if (signo == SIGQUIT)
+		funtion_sigquit(g_signal.pid);
+}
+
+void	set_signal(void)
+{
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
 }

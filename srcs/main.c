@@ -62,19 +62,18 @@ char	*line_plus_space(t_shell *shell)
  */
 void	checkline(t_shell *shell)
 {
-	signal(SIGINT, &s_int);
-	signal(SIGQUIT, &s_quit);
+	set_signal();
 	if (shell->ret)
 		ft_putstr_fd("❌ ", 2);
 	else
-		ft_putstr_fd("✔️ ", 2);
+		ft_putstr_fd("✔️", 2);
 	shell->line = readline("\033[0;32mminishell> \033[0m");
 	if (!shell->line)
 		shell->exit = 1;
 	else
 	{
-		if (g_signal.s_int == 1)
-			shell->ret = g_signal.status;
+		if (g_signal.s_int == 1 || g_signal.s_quit)
+			shell->ret = WEXITSTATUS(g_signal.status);
 		if (is_expandable(shell->line, ft_strlen(shell->line), 1) || \
 		check_forbidden(shell->line, shell))
 			return ;
@@ -126,5 +125,6 @@ int	main(int ac, char **av, char **env)
 	free_env_lst(shell.env_lst);
 	free(shell.tokens);
 	rl_clear_history();
+	ft_putstr_fd("exit\n", 2);
 	return (shell.ret);
 }
