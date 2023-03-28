@@ -75,7 +75,8 @@ void	checkline(t_shell *shell)
 	{
 		if (g_signal.s_int == 1)
 			shell->ret = g_signal.status;
-		if (is_expandable(shell->line, ft_strlen(shell->line), 1))
+		if (is_expandable(shell->line, ft_strlen(shell->line), 1) || \
+		check_forbidden(shell->line, shell))
 			return ;
 		free_completed_tab(shell->env);
 		shell->env = get_env_tab(shell->env_lst);

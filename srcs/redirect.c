@@ -29,7 +29,7 @@ void	set_redir(char *f, t_list *tokens, t_token **new)
 	else if (!ft_strncmp((char *)tokens->content, ">>", 3))
 		add_back(new, new_token(f, NULL, APPEND));
 	else
-		ft_printf("Error syntax in redirection\n");
+		ft_putstr_fd("Error syntax in redirection\n", 2);
 }
 
 /*

@@ -44,6 +44,13 @@ typedef struct s_utils
 	char	*tmp;
 }	t_utils;
 
+typedef struct s_err
+{
+	int		rep;
+	int		err;
+	char	c;
+}t_err;
+
 typedef struct s_token
 {
 	char			*filename;
@@ -187,5 +194,5 @@ char	**get_env_tab(t_env *env);
 void	free_env_lst(t_env *env);
 t_env	*init_lst(char **tab);
 char	*get_side(int side, char *s);
-
+int		check_forbidden(char *s, t_shell *sh);
 #endif
