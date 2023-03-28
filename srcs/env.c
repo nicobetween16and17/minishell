@@ -105,18 +105,15 @@ char	**env_init(const char **env)
  */
 int	ft_env(char **params, t_shell *shell)
 {
-	int		i;
 	t_env	*env;
 
 	env = shell->env_lst;
-	i = 0;
-	while (params[i])
-		i++;
-	if (i > 1)
+	if (params[1])
 	{
 		ft_putstr_fd("env: ", 1);
 		ft_putstr_fd(params[1], 1);
-		ft_putstr_fd(": Permission denied\n", 1);
+		ft_putstr_fd(": No such file or directory\n", 1);
+		return (127);
 	}
 	else
 	{
