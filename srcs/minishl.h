@@ -34,6 +34,7 @@
 # define PIPE 5
 # define RIGHT 6
 # define LEFT 7
+# define ABS(Value)	Value < 0 ? -Value : Value
 
 typedef struct s_utils
 {
@@ -97,6 +98,7 @@ typedef struct s_shell
 	char		**env;
 	int			infile;
 	int			outfile;
+	int			dir;
 	int			in;
 	int			out;
 	int			exit;

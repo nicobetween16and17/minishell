@@ -17,28 +17,31 @@
  */
 int	ft_cd(char **params, t_shell *shell)
 {
-	int		dir;
-
-	if (!params[1])
-		return (0);
-	(void)shell;
-	dir = chdir(params[1]);
-	if (dir)
+	shell->tmp = params[1];
+	if (!shell->tmp)
 	{
-		dir = open(params[1], O_RDONLY);
-		if (dir > 0)
+		shell->tmp = get_env_line(shell->env, "HOME=");
+		if (shell->tmp && ft_strlen(shell->tmp) > 5)
+			shell->tmp += 5;
+		shell->dir = chdir(shell->tmp);
+	}
+	else
+		shell->dir = chdir(shell->tmp);
+	if (shell->dir)
+	{
+		shell->dir = open(shell->tmp, O_RDONLY);
+		if (shell->dir > 0)
 		{
 			ft_putstr_fd("cd: not a directory: ", 2);
-			ft_putstr_fd(params[1], 2);
+			ft_putstr_fd(shell->tmp, 2);
 			ft_putstr_fd("\n", 2);
-			return (close(dir) + 1);
+			return (close(shell->dir) + 1);
 		}
 		ft_putstr_fd("cd: ", 2);
-		ft_putstr_fd(params[1], 2);
+		ft_putstr_fd(shell->tmp, 2);
 		ft_putstr_fd(": no such file or directory\n", 2);
-		return (1);
 	}
-	return (dir);
+	return (ABS(shell->dir));
 }
 
 /*
