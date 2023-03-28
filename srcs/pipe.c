@@ -80,7 +80,7 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
 	pipex->crt = cmds->cmds;
-	if (access(cmds->cmds[0], X_OK) && printf("here\n"))
+	if (access(cmds->cmds[0], X_OK))
 		pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
 	else
 		pipex->cmd = ft_strdup(pipex->crt[0]);
@@ -149,6 +149,9 @@ void	exec_cmds(t_shell *shell, t_token *token)
 	close(pipex.fd[pipex.n - 1][0]);
 	pipex.i = 0;
 	while (pipex.i < pipex.nb_pid)
+	{
 		waitpid(pipex.pid[pipex.i++], &pipex.status, 0);
+		shell->ret = WEXITSTATUS(pipex.status);
+	}
 	g_signal.status = shell->ret;
 }

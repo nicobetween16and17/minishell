@@ -17,7 +17,7 @@
  */
 void	free_all(t_shell *sh)
 {
-	t_token *current;
+	t_token	*current;
 
 	current = xmalloc(1);
 	while (sh->tokens)
@@ -123,8 +123,7 @@ int	main(int ac, char **av, char **env)
 	}
 	free_completed_tab(shell.env);
 	free_env_lst(shell.env_lst);
-	//free(shell.tokens);
-	//rl_clear_history();
-	//system("leaks a.out");
+	free(shell.tokens);
+	rl_clear_history();
 	return (shell.ret);
 }

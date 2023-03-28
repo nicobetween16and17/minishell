@@ -37,6 +37,7 @@ t_env	*get_next_smallest(t_env *env, char *last)
 	}
 	return (save);
 }
+
 /*
  * displays the environment variable in the alphabetical order and displays
  * "declare -x" in front of each

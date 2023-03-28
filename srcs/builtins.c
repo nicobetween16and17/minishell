@@ -32,11 +32,10 @@ int	ft_cd(char **params, t_shell *shell)
 			ft_putstr_fd(params[1], 2);
 			ft_putstr_fd("\n", 2);
 			return (close(dir) + 1);
-
 		}
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(params[1], 2);
-		ft_putstr_fd(": no such file or directory\n",2);
+		ft_putstr_fd(": no such file or directory\n", 2);
 		return (1);
 	}
 	return (dir);
