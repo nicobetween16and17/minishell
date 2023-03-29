@@ -56,3 +56,18 @@ int	nb_args(char **args)
 		size++;
 	return (size);
 }
+
+void	free_lst(t_list *t)
+{
+	t_list	*mem;
+
+	if (t)
+		mem = t->next;
+	while (t)
+	{
+		free(t);
+		t = mem;
+		if (t)
+			mem = t->next;
+	}
+}

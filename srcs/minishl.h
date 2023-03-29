@@ -198,5 +198,6 @@ void	set_signal(void);
 void	print_err(int nb_arg, ...);
 void	*safe_free(void *to_free);
 int		nb_args(char **args);
+void	free_lst(t_list *t);
 
 #endif

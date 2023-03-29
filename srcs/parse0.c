@@ -74,6 +74,9 @@ t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
  */
 void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 {
+	t_list	*head;
+
+	head = t;
 	while (t)
 	{
 		if (only_redir((char *)t->content))
@@ -94,6 +97,7 @@ void	setup_cmd(t_list *t, t_token **new, char *f, int i)
 		else
 			t = fill_cmd_tab(t, new, i);
 	}
+	free_lst(head);
 }
 
 /*
