@@ -96,10 +96,17 @@ char	**get_env_tab(t_env *env)
 
 void	free_env_lst(t_env *env)
 {
+	t_env	*mem;
+
+	if (env)
+		mem = env->next;
 	while (env)
 	{
 		free(env->name);
 		free(env->value);
-		env = env->next;
+		free(env);
+		env = mem;
+		if (env)
+			mem = env->next;
 	}
 }
