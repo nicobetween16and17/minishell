@@ -33,6 +33,8 @@ char	*get_path(char *cmd, char *path)
 		free(res);
 		res = ft_strjoin(paths[i], cmd_path);
 	}
+	if (access(res, X_OK))
+		res = safe_free(res);
 	free(cmd_path);
 	i = -1;
 	while (paths[++i])
@@ -80,13 +82,20 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
 	pipex->crt = cmds->cmds;
-	if (access(cmds->cmds[0], X_OK))
-		pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
-	else
+	if ((!ft_strncmp(cmds->cmds[0], "/", 1) || \
+	!ft_strncmp(cmds->cmds[0], "./", 2)) && !access(cmds->cmds[0], R_OK))
 		pipex->cmd = ft_strdup(pipex->crt[0]);
-	if (!pipex->cmd)
+	else
+		pipex->cmd = get_path(pipex->crt[0], get_env_line(shell->env, "PATH="));
+	if (!pipex->cmd && ++pipex->pipe_failed)
 	{
-		pipex->pipe_failed = 1;
+		print_err(3, "minishell: ", cmds->cmds[0], ": command not found\n");
+		return ;
+	}
+	if (access(cmds->cmds[0], X_OK) && !ft_strncmp(cmds->cmds[0], \
+	pipex->cmd, ft_strlen(cmds->cmds[0])) && ++pipex->pipe_failed)
+	{
+		print_err(3, "minishell: ", cmds->cmds[0], ": Permission denied\n");
 		return ;
 	}
 	pipex->pid[pipex->nb_pid] = fork();

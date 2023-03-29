@@ -195,4 +195,7 @@ t_env	*init_lst(char **tab);
 char	*get_side(int side, char *s);
 int		check_forbidden(char *s);
 void	set_signal(void);
+void	print_err(int nb_arg, ...);
+void	*safe_free(void *to_free);
+
 #endif
