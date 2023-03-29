@@ -102,7 +102,6 @@ typedef struct s_shell
 	int			in;
 	int			out;
 	int			exit;
-	int			ret;
 	char		folie[10];
 	int			last;
 	t_env		*env_lst;
@@ -117,6 +116,7 @@ typedef struct s_sig
 	int		status;
 	pid_t	pid;
 	char	str_status[10];
+	int		ret;
 }	t_sig;
 
 t_sig	g_signal;
@@ -170,7 +170,6 @@ char	*empty_freeable_string(void);
 char	*replace(char *str, char *start, char *end, char *replace);
 int		is_expandable(char *s, int i, int open);
 void	replace_words(t_shell *shell, int i, int j);
-int		error_open(char *file, t_shell *sh);
 void	redirect(t_shell *sh, char *f, int type);
 void	init_signal(void);
 void	set_redir(char *f, t_list *tokens, t_token **new);
@@ -194,6 +193,6 @@ char	**get_env_tab(t_env *env);
 void	free_env_lst(t_env *env);
 t_env	*init_lst(char **tab);
 char	*get_side(int side, char *s);
-int		check_forbidden(char *s, t_shell *sh);
+int		check_forbidden(char *s);
 void	set_signal(void);
 #endif

@@ -25,6 +25,7 @@ void	init_signal(void)
 
 void	funtion_sigint(pid_t pid)
 {
+	g_signal.ret = 1;
 	if (pid == -1)
 	{
 		ft_putstr_fd("  \b\b", 1);
@@ -53,8 +54,7 @@ void	funtion_sigquit(pid_t pid)
 	}
 	else
 	{
-		ft_putstr_fd("Quit: ", 2);
-		ft_putendl_fd(nbr, 2);
+		ft_putstr_fd("Quit: 3", 2);
 	}
 	free(nbr);
 }

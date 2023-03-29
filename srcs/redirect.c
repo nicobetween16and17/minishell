@@ -35,9 +35,9 @@ void	set_redir(char *f, t_list *tokens, t_token **new)
 /*
  * display an error message
  */
-int	error_open(char *file, t_shell *sh)
+static int	error_open(char *file)
 {
-	sh->ret = 1;
+	g_signal.ret = 1;
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(file, 2);
 	ft_putendl_fd(": No such file or directory", 2);
@@ -56,7 +56,7 @@ void	redirect(t_shell *sh, char *f, int type)
 			sh->infile = open(".heredoc.tmp", O_RDONLY);
 		else
 			sh->infile = open(f, O_RDONLY);
-		if (sh->infile == -1 && error_open(f, sh))
+		if (sh->infile == -1 && error_open(f))
 			return ;
 		dup2(sh->infile, 0);
 		return ;

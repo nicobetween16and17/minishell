@@ -69,7 +69,7 @@ char	*get_env(char *s, char **env)
 	int		j;
 	char	*itoa_n;
 
-	itoa_n = ft_itoa(g_signal.status);
+	itoa_n = ft_itoa(g_signal.ret);
 	ft_bzero(g_signal.str_status, 9);
 	ft_strlcpy(g_signal.str_status, itoa_n, 9);
 	free(itoa_n);

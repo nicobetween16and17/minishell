@@ -41,7 +41,7 @@ static int	handle_error(char *s, int i, int *e)
 	return (i);
 }
 
-int	check_forbidden(char *s, t_shell *sh)
+int	check_forbidden(char *s)
 {
 	int	i;
 	int	e;
@@ -54,7 +54,7 @@ int	check_forbidden(char *s, t_shell *sh)
 			i = handle_error(s, i, &e);
 		if (e)
 		{
-			sh->ret = e;
+			g_signal.ret = e;
 			ft_putstr_fd("shell: syntax error near unexptected token \'", 2);
 			ft_putchar_fd(s[i], 2);
 			ft_putstr_fd("\'\n", 2);

@@ -63,7 +63,7 @@ char	*line_plus_space(t_shell *shell)
 void	checkline(t_shell *shell)
 {
 	set_signal();
-	if (shell->ret)
+	if (g_signal.ret)
 		ft_putstr_fd("❌ ", 2);
 	else
 		ft_putstr_fd("✔️", 2);
@@ -72,10 +72,8 @@ void	checkline(t_shell *shell)
 		shell->exit = 1;
 	else
 	{
-		if (g_signal.s_int == 1 || g_signal.s_quit)
-			shell->ret = WEXITSTATUS(g_signal.status);
 		if (is_expandable(shell->line, ft_strlen(shell->line), 1) || \
-		check_forbidden(shell->line, shell))
+		check_forbidden(shell->line))
 			return ;
 		free_completed_tab(shell->env);
 		shell->env = get_env_tab(shell->env_lst);
@@ -97,7 +95,7 @@ void	init_shell(t_shell *shell, char **env)
 	shell->in = dup(0);
 	shell->out = dup(1);
 	shell->exit = 0;
-	shell->ret = 0;
+	g_signal.ret = 0;
 	shell->env = env_init((const char **)env);
 	shell->env_lst = init_lst(shell->env);
 	init_signal();
@@ -125,6 +123,5 @@ int	main(int ac, char **av, char **env)
 	free_env_lst(shell.env_lst);
 	free(shell.tokens);
 	rl_clear_history();
-	ft_putstr_fd("exit\n", 2);
-	return (shell.ret);
+	return (g_signal.ret);
 }

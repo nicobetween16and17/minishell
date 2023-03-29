@@ -41,19 +41,19 @@ int	x_bi(char **cmd, int type, t_shell *sh)
 	if (!type)
 		return (0);
 	if (type == 1)
-		sh->ret = ft_echo(cmd, sh);
+		g_signal.ret = ft_echo(cmd, sh);
 	if (type == 2)
-		sh->ret = ft_cd(cmd, sh);
+		g_signal.ret = ft_cd(cmd, sh);
 	if (type == 3)
-		sh->ret = ft_pwd(cmd, sh);
+		g_signal.ret = ft_pwd(cmd, sh);
 	if (type == 4)
-		sh->ret = ft_env(cmd, sh);
+		g_signal.ret = ft_env(cmd, sh);
 	if (type == 5)
-		sh->ret = ft_unset(cmd, sh);
+		g_signal.ret = ft_unset(cmd, sh);
 	if (type == 6)
-		sh->ret = ft_export(cmd, sh);
+		g_signal.ret = ft_export(cmd, sh);
 	if (type == 7)
-		sh->ret = ft_exit(cmd, sh);
+		g_signal.ret = ft_exit(cmd, sh);
 	return (type);
 }
 

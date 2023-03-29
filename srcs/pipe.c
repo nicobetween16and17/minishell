@@ -151,7 +151,6 @@ void	exec_cmds(t_shell *shell, t_token *token)
 	while (pipex.i < pipex.nb_pid)
 	{
 		waitpid(pipex.pid[pipex.i++], &pipex.status, 0);
-		shell->ret = WEXITSTATUS(pipex.status);
+		g_signal.ret = WEXITSTATUS(pipex.status);
 	}
-	g_signal.status = shell->ret;
 }

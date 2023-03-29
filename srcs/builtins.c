@@ -112,9 +112,10 @@ int	ft_echo(char **args, t_shell *shell)
 int	ft_exit(char **params, t_shell *shell)
 {
 	shell->exit = 1;
+	ft_putstr_fd("exit\n", 2);
 	if (params[1] && ft_strisnum(params[1]) == 0)
 	{
-		shell->ret = 255;
+		g_signal.ret = 255;
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(params[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
@@ -122,13 +123,13 @@ int	ft_exit(char **params, t_shell *shell)
 	else if (params[1] && params[2])
 	{
 		ft_putstr_fd("exit\n", 2);
-		shell->ret = 1;
+		g_signal.ret = 1;
 		ft_putendl_fd("minishell: exit: too many arguments", 2);
 		shell->exit = 0;
 	}
 	else if (params[1])
-		shell->ret = ft_atoi(params[1]);
+		g_signal.ret = ft_atoi(params[1]);
 	else
-		shell->ret = 0;
-	return (shell->ret);
+		g_signal.ret = 0;
+	return (g_signal.ret);
 }
