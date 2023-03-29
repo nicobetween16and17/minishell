@@ -123,5 +123,6 @@ int	main(int ac, char **av, char **env)
 	free_env_lst(shell.env_lst);
 	free(shell.tokens);
 	rl_clear_history();
+	unlink(".heredoc.tmp");
 	return (g_signal.ret);
 }
