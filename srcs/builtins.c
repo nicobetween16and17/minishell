@@ -61,22 +61,22 @@ int	ft_pwd(char **params, t_shell *shell)
 }
 
 /*
- * returns the number of parameters
- */
-static int	nb_args(char **args)
-{
-	int		size;
-
-	size = 0;
-	while (args[size])
-		size++;
-	return (size);
-}
-
-/*
  * displays the parameters and \n except if the second one start
  * with '-' and only contains n
  */
+int	only_n(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i])
+	{
+		if ((i == 0 && s[i] != '-') || (i > 0 && s[i] != 'n'))
+			return (1);
+	}
+	return (0);
+}
+
 int	ft_echo(char **args, t_shell *shell)
 {
 	int		i;
@@ -87,7 +87,7 @@ int	ft_echo(char **args, t_shell *shell)
 	n_option = 0;
 	if (nb_args(args) > 1)
 	{
-		while (args[i] && ft_strncmp(args[i], "-n", 3) == 0)
+		if (args[i] && !only_n(args[i]))
 		{
 			n_option = 1;
 			i++;

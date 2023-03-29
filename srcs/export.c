@@ -30,7 +30,7 @@ char	*get_side(int side, char *s)
 		res[j] = 0;
 		return (res);
 	}
-	res = xmalloc(sizeof(char) * ++i);
+	res = xmalloc(sizeof(char) * (i + 2));
 	i = 0;
 	res[i] = s[i];
 	while (s[++i] && s[i] && s[i - 1] != '=')

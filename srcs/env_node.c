@@ -83,7 +83,7 @@ char	**get_env_tab(t_env *env)
 	char	**tab;
 
 	i = get_env_size(env);
-	tab = xmalloc(sizeof(char *) * i);
+	tab = xmalloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (env)
 	{

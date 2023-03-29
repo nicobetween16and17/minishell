@@ -76,9 +76,6 @@ void	pipe_exec2(t_shell *shell, t_pipe *pipex)
 		exit(1);
 }
 
-/*
- * get the path and fork, stop if the fork failed, the execute
- */
 void	pipe_exec(t_shell *shell, t_token *cmds, t_pipe *pipex)
 {
 	pipex->crt = cmds->cmds;

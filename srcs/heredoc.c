@@ -43,3 +43,16 @@ int	here_doc(char *delimiter)
 	}
 	return (here_doc_file);
 }
+
+/*
+ * returns the number of parameters
+ */
+int	nb_args(char **args)
+{
+	int		size;
+
+	size = 0;
+	while (args[size])
+		size++;
+	return (size);
+}
