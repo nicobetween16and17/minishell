@@ -3,102 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   parse0.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: katalbi <katalbi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
-/*   Updated: 2023/01/19 21:12:13 by niespana         ###   ########.fr       */
+/*   Updated: 2023/04/04 11:31:16 by katalbi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishl.h"
 
+void	cut_until2(char *s, t_utils *utils, t_utils3 *u)
+{
+	utils->content->s = sub(s, u->start, u->len);
+	utils->content->quotes = has_quotes(s, u->len, u->start);
+	if (ft_strlen(utils->content->s) || (only_redir(u->previous->s) && \
+	utils->content->quotes))
+		ft_lstadd_back(&utils->tokens, ft_lstnew((void *)utils->content));
+	else
+	{
+		utils->content->s = safe_free(utils->content->s);
+		utils->content = safe_free(utils->content);
+	}
+	utils->i += u->len;
+}
+
+/*
+ * cut the part of the command line and erase the quotes except the one
+ * that are situated between opposed quotes
+ */
 int	cut_until(char *s, t_utils *utils, char *stop)
 {
-	int	start;
-	int	len;
+	t_utils3	u;
 
-	len = 1;
-	start = utils->i;
+	u.last = ft_lstlast(utils->tokens);
+	if (u.last)
+		u.previous = (t_content *)u.last->content;
+	utils->content = malloc(sizeof(t_content));
+	u.len = 1;
+	u.start = utils->i;
 	if (stop == NULL)
 	{
 		stop = &s[utils->i];
-		while (s[utils->i + len] && s[utils->i + len] == stop[0])
-			len++;
+		while (s[utils->i + u.len] && s[utils->i + u.len] == stop[0])
+			u.len++;
 	}
 	else
 	{
-		while (s[utils->i + len] && (is_btwn_q(s, utils->i + len) \
-		|| !is_charset(s[utils->i + len], stop)))
-			len++;
+		while (s[u.start + u.len] && (!is_charset(s[u.start + u.len], stop) || \
+		is_btwn_q(s, u.start + u.len)))
+			u.len++;
 	}
-	utils->tmp = sub(s + start, len);
-	if (strlen(utils->tmp))
-		ft_lstadd_back(&utils->tokens, ft_lstnew(utils->tmp));
+	cut_until2(s, utils, &u);
+	return (1);
+}
+
+void	setup_cmd2(t_list **t, t_utils4 *u, t_shell *shell)
+{
+	if (only_redir(u->crt->s) && !u->crt->quotes)
+	{
+		if (u->nxt)
+			u->f = u->nxt->s;
+		if (!u->f || !ft_strlen(u->f))
+			set_redir("", u->crt, &shell->tokens, shell);
+		else
+			set_redir(u->f, u->crt, &shell->tokens, shell);
+		next_token(t);
+	}
+	else if (u->f && !ft_strcmp(u->crt->s, u->f))
+		*t = (*t)->next;
+	else if (!ft_strcmp(u->crt->s, "|") && !u->crt->quotes)
+	{
+		safe_free(u->crt->s);
+		safe_free(u->crt);
+		add_back(&shell->tokens, new_token(NULL, NULL, PIPE));
+		next_token(t);
+	}
 	else
-		free(utils->tmp);
-	utils->i += len;
-	return (1);
+		*t = fill_cmd_tab(*t, &shell->tokens, u->i);
 }
 
-int	set_last(t_utils *utils, int i)
+/*
+ * depending of the features of the token, create the complete token with a type
+ */
+void	setup_cmd(t_list *t, t_shell *shell, char *f, int i)
 {
-	utils->last = i;
-	return (1);
-}
+	t_list		*head;
+	t_utils4	u;
 
-void	setup_cmd2(t_list *new, t_shell *sh)
-{
-	char	**current_cmd;
-	t_list	*head;
-	int		i;
-
-	i = 0;
-	head = new;
-	while (new && ft_strncmp((char *)new->content, "|", 2) && ++i)
-		new = new->next;
-	current_cmd = xmalloc(sizeof(char *) * ++i);
-	new = head;
-	i = 0;
-	while (new && ft_strncmp((char *)new->content, "|", 2))
+	u.f = f;
+	u.i = i;
+	head = t;
+	while (t)
 	{
-		current_cmd[i++] = new->content;
-		new = new->next;
+		u.crt = (t_content *)t->content;
+		if (t->next)
+			u.nxt = (t_content *)t->next->content;
+		else
+			u.nxt = NULL;
+		setup_cmd2(&t, &u, shell);
 	}
-	current_cmd[i] = 0;
-	ft_lstadd_back(&sh->cmd, ft_lstnew(current_cmd));
-	if (new && new->next)
-		setup_cmd2(new->next, sh);
+	free_lst(head);
 }
 
-void	setup_cmd(t_list *tokens, t_shell *shell, char *f)
-{
-	t_list	*new;
-
-	new = ft_lstnew(NULL);
-	while (tokens)
-	{
-		if ((((char *)tokens->content)[0] == '>' \
-		|| ((char *)tokens->content)[0] == '<') && tokens->next)
-			f = (char *)tokens->next->content;
-		if (!ft_strncmp((char *)tokens->content, "<", 2))
-		{
-			shell->outfile = open(f, O_RDWR);
-			if (shell->infile == -1 && shell->infile++)
-				printf("%s: permission denied\n", f);
-		}
-		else if (!ft_strncmp((char *)tokens->content, "<<", 3))
-			shell->heredoc = NULL;
-		else if (!ft_strncmp((char *)tokens->content, ">", 2))
-			shell->infile = open(f, O_RDWR | O_CREAT | O_APPEND, 0644);
-		else if (!ft_strncmp((char *)tokens->content, ">>", 3))
-			shell->infile= open(f, O_RDWR | O_APPEND | O_CREAT, 0644);
-		else if (ft_strncmp((char *)tokens->content, f, ft_strlen(f + 1)))
-			ft_lstadd_back(&new, ft_lstnew(tokens->content));
-		tokens = tokens->next;
-	}
-	setup_cmd2(new->next, shell);
-}
-
+/*
+ * parse through the line and cut when encounter some key words, remove the
+ * quotes too. then create type for the tokens.
+ */
 void	parse(char *s, t_shell *sh)
 {
 	t_utils	utils;
@@ -109,16 +119,16 @@ void	parse(char *s, t_shell *sh)
 	utils.cmd = 1;
 	while (s[utils.i])
 	{
-		(((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) && \
+		((((s[utils.i] == '<' || s[utils.i] == '>') && set_last(&utils, 1) && \
 		!is_btwn_q(s, utils.i) && cut_until(s, &utils, NULL)) || \
 		(s[utils.i] == '|' && set_last(&utils, 1) && !is_btwn_q(s, utils.i) && \
 		cut_until(s, &utils, NULL)) || (utils.i == 0 && !is_btwn_q(s, utils.i) \
-		&& cut_until(s, &utils, " ")) || ((s[utils.i] == ' ' || !s[utils.i] || \
+		&& cut_until(s, &utils, " |")) || ((s[utils.i] == ' ' || !s[utils.i] || \
 		(utils.last && set_last(&utils, 0))) && !is_btwn_q(s, utils.i) && \
-		cut_until(s, &utils, " |<>") || ++utils.i));
+		cut_until(s, &utils, " |<>")) || ++utils.i));
 	}
 	utils.tmp = "";
 	utils.tokens = utils.tokens->next;
-	sh->cmd = ft_lstnew(NULL);
-	setup_cmd(utils.tokens, sh, utils.tmp);
+	sh->tokens = new_token(NULL, NULL, -1);
+	setup_cmd(utils.tokens, sh, utils.tmp, 0);
 }

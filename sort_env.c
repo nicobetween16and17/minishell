@@ -3,77 +3,98 @@
 /*                                                        :::      ::::::::   */
 /*   sort_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbierny <gbierny@student.42.fr>            +#+  +:+       +#+        */
+/*   By: katalbi <katalbi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/10 22:19:05 by gbierny           #+#    #+#             */
-/*   Updated: 2023/01/13 20:23:18 by gbierny          ###   ########.fr       */
+/*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
+/*   Updated: 2023/04/04 10:38:47 by katalbi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishl.h"
 
-
-char *print_name_variable(char *s)
+char	*print_name_variable(char *s)
 {
-    size_t i;
+	size_t	i;
 
-    i = 0;
-    while (s[i] && s[i] != '=')
-        i++;
-    write(1, s, i);
-    return (s + i + 1);
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	write(1, s, i);
+	return (s + i + 1);
 }
 
-void env_in_alphabetic_order(char **envp)
+t_env	*get_next_smallest(t_env *env, char *last)
 {
-    int i;
-    int j;
+	t_env	*save;
 
-    i = 0;
-    char *s;
-    while (envp[i])
-    {
-        j = i;
-        while (envp[j + 1])
-        {
-            if(ft_strncmp(envp[i], envp[j], ft_strlen(envp[i])) > 0)
-            envp = switch_env_var(envp, i, j);
-            j++;
-        }
-        i++;
-    }
-    i = 0;
-    while (envp[i])
-    {
-        ft_putstr_fd("declare -x ", 1);
-        s = print_name_variable(envp[i]);
-        ft_putstr_fd("=\"", 1);
-        ft_putstr_fd(s, 1);
-        ft_putstr_fd("\"\n", 1);
-        i++;
-    }
+	save = NULL;
+	while (env)
+	{
+		if (ft_strncmp(env->name, last, ft_strlen(env->name)) > 0 && \
+		(!save || ft_strncmp(env->name, save->name, ft_strlen(env->name)) < 0))
+		save = env;
+		env = env->next;
+	}
+	return (save);
 }
 
-char **switch_env_var(char **envp, int i, int j)
+/*
+ * displays the environment variable in the alphabetical order and displays
+ * "declare -x" in front of each
+ */
+int	env_in_alphabetic_order(t_env *env)
 {
-    char *tmp;
+	char	*last;
+	t_env	*current;
 
-    tmp = envp[i];
+	last = "\0";
+	while (1)
+	{
+		current = get_next_smallest(env, last);
+		if (current)
+			last = current->name;
+		else
+			break ;
+		ft_printf("declare -x %s%s\n", current->name, current->value);
+	}
+	return (0);
+}
 
-    envp[i] = malloc(sizeof(char) * (ft_strlen(envp[j] + 1)));
-    if (!envp[i])
-    {
-       printf("malloc probleme");
-        exit(0);
-    }
-    envp[i] = envp[j];
-    envp[j] = malloc(sizeof(char) * (ft_strlen(tmp) + 1));
-    if (!envp[j])
-    {
-       printf("malloc error");
-        exit(0);
-    }
-    envp[j] = tmp;
-    return(envp);
+/*
+ * returns the value of an environment variable or the status of the last
+ * command line if s = "$?"
+ */
+char	*get_env(char *s, t_shell *shell)
+{
+	t_env	*node;
+	char	*itoa_n;
+
+	itoa_n = ft_itoa(g_signal.ret);
+	ft_bzero(g_signal.str_status, 9);
+	ft_strlcpy(g_signal.str_status, itoa_n, 9);
+	free(itoa_n);
+	if (!ft_strncmp("?", s, 2))
+		return (g_signal.str_status);
+	shell->tmp = ft_strjoin(s, "=");
+	if (!shell->tmp)
+		exit(1);
+	node = get_env_side(shell->env_lst, shell->tmp, NONE);
+	shell->tmp = safe_free(shell->tmp);
+	if (node)
+		return (node->value);
+	return ("");
+}
+
+/*
+ * returns the line of the environment variable (expected format NAME=)
+ */
+char	*get_env_line(t_env *env, char *env_line)
+{
+	while (env)
+	{
+		if (!ft_strcmp(env->name, env_line))
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
 }

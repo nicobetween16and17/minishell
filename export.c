@@ -3,137 +3,116 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gbierny <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: niespana <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/10 22:18:13 by gbierny           #+#    #+#             */
-/*   Updated: 2023/01/10 22:18:57 by gbierny          ###   ########.fr       */
+/*   Created: 2023/01/19 21:12:12 by niespana          #+#    #+#             */
+/*   Updated: 2023/01/19 21:12:13 by niespana         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishl.h"
 
-
-char *ft_strndup(char *s, size_t n)
+char	*get_side(int side, char *s)
 {
-    int i;
-    char *new_s;
-    i = 0;
-    while (s[i] && i < n)
-        i++;
-    new_s = malloc((i + 1) * sizeof(char));
-    if (!new_s)
-    {
-        printf("error");
-        exit(0);
-    }
-    ft_strlcpy(new_s, s, i);
-    new_s[i] = 0;
-    return (new_s);
+	int		i;
+	char	*res;
+	int		j;
+
+	j = 0;
+	i = 0;
+	while (s[i] && s[i] != '=')
+		i++;
+	if (side == RIGHT)
+	{
+		res = xmalloc(sizeof(char) * (ft_strlen(s) - i + 1));
+		while (s[i] && s[++i])
+			res[j++] = s[i];
+		res[j] = 0;
+		return (res);
+	}
+	res = xmalloc(sizeof(char) * (i + 2));
+	i = 0;
+	res[i] = s[i];
+	while (s[++i] && s[i] && s[i - 1] != '=')
+		res[i] = s[i];
+	res[i] = 0;
+	return (res);
 }
 
-void    export(char **tab_s, char **envp)
+int	change_env(t_env *env, char *s)
 {
-    int i;
-
-    i = 0;
-    if (!tab_s)
-    {
-       env_in_alphabetic_order();
-       return (0);
-    }
-    while (tab_s[i])
-    {
-        envp = change_var(tab_s[i], envp);
-        i++;
-    }
+	while (env)
+	{
+		if (!ft_strncmp(s, env->name, ft_strlen(env->name)))
+		{
+			free(env->value);
+			env->value = get_side(RIGHT, s);
+			return (1);
+		}
+		env = env->next;
+	}
+	return (0);
 }
 
-char *name_env_var(char *s)
+t_env	*init_lst(char **tab)
 {
-    int i;
-    char *new;
-    i = 0;
-    while (s[i] && s[i] != '=')
-        i++;
-    if (s[i] != '=')
-    {
-        printf("not a valid identifier");
-        exit(0);
-    }
-    new = ft_strndup(s, i + 1);
-    return (new);
+	int		i;
+	t_env	*env;
+
+	env = new_env(NULL, NULL);
+	i = -1;
+	while (tab[++i])
+		add_env(&env, new_env(get_side(LEFT, tab[i]), get_side(RIGHT, tab[i])));
+	return (env->next);
 }
 
-char **add_back_tab(char **tab, char *s)
+/*
+ * check if the parameter is a valid and existing name of environment
+ * and erase the line if it is
+ */
+int	ft_unset(char **params, t_shell *shell)
 {
-    int i;
-    char **new_tab;
-    i = 0;
-    while(tab[i])
-        i++;
-    new_tab = malloc((i + 2) * sizeof(char *));
-    i = -1;
-    while (tab[++i])
-        new_tab[i] = ft_strdup(tab[i]);
-    new_tab[i] = ft_strdup(s);
-    new_tab[i + 1] = NULL;
-    return (new_tab);
+	int	i;
+
+	i = 0;
+	while (params[++i])
+	{
+		if (remove_env(shell, params[i]))
+		{
+			ft_putstr_fd("invalid identifier\n", 2);
+			return (1);
+		}
+	}
+	return (0);
 }
 
-char **change_var(char *s, char **envp)
+/*
+ * if no parameters, shows all the environment variables
+ * if parameters, for each parameters, call change_var
+ */
+int	ft_export(char **params, t_shell *shell)
 {
-    int i;
+	int	i;
+	int	check;
 
-    i = 0;
-    i = check_arg(s);
-    if (i < 0)
-        return (envp);
-    i = -1;
-    while (envp[++i])
-    {
-        if (!ft_strncmp(name_env_var(s), name_env_var(envp[i]), ft_strlen(s)))
-            envp = erase_env_var(i, envp);
-    }
-    envp = add_back_tab(envp, s);
-    return (envp);
-}
-
-char **erase_env_var(int i, char **envp)
-{
-    int j;
-    char **new_envp;
-
-    j = 0;
-    while (envp[j])
-        j++;
-    new_envp = malloc(j * sizeof(char*));
-    if (!new_envp)
-    {
-       printf("malloc problem");
-        exit(0);
-    }
-    j = -1;
-    while(++j < i)
-        new_envp[j] = ft_strdup(envp[j]);
-    while (envp[++j])
-        new_envp[j] = ft_strdup(envp[j]);
-    new_envp[j] = NULL;
-    return (new_envp);
-}
-
-int check_arg(char *s)
-{
-    int i;
-    
-    i = 0;
-    while (s[i] && s[i] != '=')
-        i++;
-    if (s[i] == '=' && i == 0)
-    {
-        printf("invalid identifier");
-        exit(0);
-    }
-    if (s[i] == 0)
-        return (-1);
-    return (i);
+	if (!params[1])
+	{
+		env_in_alphabetic_order(shell->env_lst);
+		return (0);
+	}
+	i = 0;
+	while (params[++i])
+	{
+		check = valid_identifier(params[1]);
+		if (!check)
+			return (1);
+		if (check == 1 && !change_env(shell->env_lst, params[i]))
+			add_env(&shell->env_lst, \
+			new_env(get_side(LEFT, params[i]), get_side(RIGHT, params[i])));
+		if (check == 2)
+			append_env(shell->env_lst, params[i], shell);
+		if (check == 3)
+			add_env_plus_equal(shell, params[i]);
+	}
+	return (0);
 }

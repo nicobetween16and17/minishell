@@ -31,7 +31,13 @@ SRCS	=	ft_atoi.c \
 			ft_strtrim.c \
 			ft_substr.c \
 			ft_tolower.c \
-			ft_toupper.c
+			ft_toupper.c \
+			ft_utils.c \
+			ft_printf.c \
+			ft_print_ptr.c \
+			ft_printhex.c \
+			get_next_line.c \
+			get_next_line_utils.c
 
 NAME	=	libft.a
 
@@ -60,11 +66,11 @@ BONUSOBJS	=	${BONUS:.c=.o}
 OBJS	=	${SRCS:.c=.o}
 
 
-.c.o: 
+.c.o:
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 ${NAME}: ${OBJS}
-		${ARRCS} ${NAME} ${OBJS} 
+		${ARRCS} ${NAME} ${OBJS}
 
 all: ${NAME}
 

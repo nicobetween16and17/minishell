@@ -12,6 +12,50 @@
 
 #include "minishl.h"
 
+/*
+ * create an easy to une cmd with the arguments
+ */
+t_list	*fill_cmd_tab(t_list *t, t_token **new, int i)
+{
+	char		**cmds;
+	t_content	*crt;
+
+	crt = t->content;
+	cmds = cmds_malloc(t);
+	i = 0;
+	while (t && (crt->quotes || (ft_strncmp(crt->s, "|", 2) && \
+	!only_redir(crt->s))))
+	{
+		cmds[i++] = crt->s;
+		t = t->next;
+		if (t)
+			crt = t->content;
+	}
+	(!(cmds[i] = 0) && add_back(new, new_token(NULL, cmds, CMD)));
+	return (t);
+}
+
+int	has_quotes(char *s, int len, int start)
+{
+	int	i;
+	int	stop;
+
+	stop = -1;
+	i = start;
+	while (s[i] && ++stop < len)
+	{
+		if (is_btwn_q(s, i) || \
+		(!is_btwn_q(s, i) && (s[i] == '\'' || s[i] == '\"')))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+/*
+ * returns 1 if the iterator point to a char of a string that is between
+ * quotes. the start and end quotes are consider as outside of the quote
+ */
 int	is_btwn_q(char *s, int i)
 {
 	int	sgl;
@@ -27,38 +71,40 @@ int	is_btwn_q(char *s, int i)
 		&& s[j] == '\'' && ++sgl) || (!sgl && dbl && s[j] == '\"' \
 		&& dbl--) || (!dbl && sgl && s[j] == '\'' && sgl--));
 	}
+	if ((sgl && s[j] == '\'') || (dbl && s[j] == '\"'))
+		return (0);
 	return (sgl || dbl);
 }
 
-char	*sub(char *s, int len)
+/*
+ * create a substring without the useless quotes
+ */
+char	*sub(char *s, int start, int len)
 {
 	t_utils2	u;
 
 	u.f = 0;
 	u.j = 0;
 	u.nbq = 0;
-	u.i = -1;
-	while (s[++u.i])
-		if (!is_btwn_q(s, u.i) && s[u.i] == '\"' || s[u.i] == '\'')
-			u.nbq++;
-	u.i = -1;
-	u.sub = malloc(sizeof(char) * (len + 1 - u.nbq));
+	u.i = -1 + start;
 	while (s[++u.i] && u.i < len)
+		if (!is_btwn_q(s, u.i) && (s[u.i] == '\"' || s[u.i] == '\''))
+			u.nbq++;
+	u.i = -1 + start;
+	u.sub = xmalloc(sizeof(char) * (len + 1 - u.nbq));
+	while (s[++u.i] && u.i < start + len)
 	{
-		if (!((s[u.i] == '\"' || s[u.i] == '\'' || s[u.i] == ' ') \
-		&& !is_btwn_q(s, u.i + u.f)))
-		{
-			if (u.f)
-				u.f = 0;
-			else
-				u.f = 1;
+		if (((!is_btwn_q(s, u.i) && s[u.i] != '\'' && s[u.i] != '\"' && \
+		s[u.i] != ' ') || is_btwn_q(s, u.i)))
 			u.sub[u.j++] = s[u.i];
-		}
 	}
 	u.sub[u.j] = 0;
 	return (u.sub);
 }
 
+/*
+ * return 1 if the character is in the charset else 0
+ */
 int	is_charset(char c, char *charset)
 {
 	while (charset && *charset)
